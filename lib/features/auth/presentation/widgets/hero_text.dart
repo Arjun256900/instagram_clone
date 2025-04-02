@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_colors.dart';
 
 class HeroText extends StatelessWidget {
-  final isDarkMode;
+  final bool isDarkMode;
   final String text;
   final String subText;
   const HeroText({
@@ -20,18 +20,22 @@ class HeroText extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 25.4,
+            fontWeight: FontWeight.bold,
             color: isDarkMode ? AppColors.darkSecondary : AppColors.secondary,
           ),
         ),
         const SizedBox(height: 5),
-        Text(
-          subText,
-          style: TextStyle(
-            fontSize: 16,
-            color: isDarkMode ? AppColors.darkSecondary : AppColors.secondary,
+        if (subText.isNotEmpty) ...[
+          const SizedBox(height: 5),
+          Text(
+            subText,
+            style: TextStyle(
+              fontSize: 15,
+              color: isDarkMode ? AppColors.darkSecondary : AppColors.secondary,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

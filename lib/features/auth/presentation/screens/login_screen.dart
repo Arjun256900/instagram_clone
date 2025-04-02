@@ -17,11 +17,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   String? userNameErrorMessage;
   String? passwordErrorMessage;
+  bool hasTriedToLogin = false;
 
   void validateInput() {
+    hasTriedToLogin = true;
     final userName = userNameController.text.trim();
     final password = passwordController.text.trim();
     if (userName.length >= 3 && password.length >= 8) {
+      setState(() {
+        userNameErrorMessage = null;
+        passwordErrorMessage = null;
+      });
       //TODO  LOGIN LOGIC
     } else {
       setState(() {
@@ -37,16 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     print("User name: " + userName + "password: " + password);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (userNameErrorMessage != null) {
-      userNameController.addListener(validateInput);
-    } else if (passwordErrorMessage != null) {
-      passwordController.addListener(validateInput);
-    }
   }
 
   @override
@@ -81,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: "Phone number, username or email",
                       isPassword: false,
                       errorMessage: userNameErrorMessage,
+                      isMobile: false,
                     ),
                     const SizedBox(height: 16),
 
@@ -90,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: "Password",
                       isPassword: true,
                       errorMessage: passwordErrorMessage,
+                      isMobile: false,
                     ),
                     const SizedBox(height: 16),
 
@@ -100,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isEnabled:
                           (userNameErrorMessage == null &&
                               passwordErrorMessage == null),
+                      hasTriedToSubmit: hasTriedToLogin,
                     ),
                     const SizedBox(height: 16),
 

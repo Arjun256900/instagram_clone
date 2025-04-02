@@ -5,12 +5,14 @@ class AuthButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool isEnabled;
+  final bool hasTriedToSubmit;
 
   const AuthButton({
     super.key,
     required this.text,
     this.onPressed,
     required this.isEnabled,
+    required this.hasTriedToSubmit,
   });
 
   @override
@@ -18,7 +20,12 @@ class AuthButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: isEnabled ? onPressed : null,
+        onPressed:
+            isEnabled
+                ? onPressed
+                : hasTriedToSubmit
+                ? onPressed
+                : () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
