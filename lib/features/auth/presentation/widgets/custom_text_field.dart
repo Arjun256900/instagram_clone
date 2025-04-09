@@ -54,7 +54,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             suffixIcon:
                 hasError
-                    ? const Icon(Icons.error_outline, color: Colors.red)
+                    ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.error_outline, color: Colors.red),
+                        if (widget
+                            .isPassword) // Only show the visibility icon if it's a password field
+                          const SizedBox(width: 5),
+                        if (widget.isPassword)
+                          IconButton(
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscure = !_isObscure;
+                              });
+                            },
+                          ),
+                      ],
+                    )
                     : widget.isPassword
                     ? IconButton(
                       icon: Icon(

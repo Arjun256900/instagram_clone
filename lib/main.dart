@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_theme.dart';
 import 'package:instagram/features/auth/presentation/screens/login_screen.dart';
 
+
 void main() {
   runApp(const MyApp());
 }

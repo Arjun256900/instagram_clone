@@ -6,6 +6,7 @@ class AuthButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isEnabled;
   final bool hasTriedToSubmit;
+  final bool? isLoading;
 
   const AuthButton({
     super.key,
@@ -13,6 +14,7 @@ class AuthButton extends StatelessWidget {
     this.onPressed,
     required this.isEnabled,
     required this.hasTriedToSubmit,
+    this.isLoading,
   });
 
   @override
@@ -33,14 +35,21 @@ class AuthButton extends StatelessWidget {
           ),
           padding: EdgeInsets.symmetric(vertical: 12),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child:
+            isLoading == true
+                ? SizedBox(
+                  height: 23.5,
+                  width: 23.5,
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
+                : Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
       ),
     );
   }

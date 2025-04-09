@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/auth/presentation/screens/already_have_account.dart';
+import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_password.dart';
 import 'dart:ui';
 
@@ -15,7 +15,7 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends State<SignupScreen> {  
   final mobileEmailController = TextEditingController();
   var isMobile = true;
   bool isLoading = false;
@@ -161,7 +161,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     const Spacer(),
 
-                    AlreadyHaveAccount(num: 1),
+                    AlreadyHaveAccount(num: 2),
                   ],
                 ),
               ),
