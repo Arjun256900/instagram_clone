@@ -1,28 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/date_of_birth.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SetPassword extends StatefulWidget {
-  final bool isMobile;
-  const SetPassword({super.key, required this.isMobile});
+class SetPassword extends ConsumerStatefulWidget {
+  const SetPassword({super.key});
 
   @override
-  State<SetPassword> createState() => _SetPasswordState();
+  ConsumerState<SetPassword> createState() => _SetPasswordState();
 }
 
-class _SetPasswordState extends State<SetPassword> {
+class _SetPasswordState extends ConsumerState<SetPassword> {
   final passwordEditingController = TextEditingController();
   String? errorMessage;
   bool hasTriedToSetPassword = false;
 
   void validateInput() {
+    final password = passwordEditingController.text;
     hasTriedToSetPassword = true;
-    if (passwordEditingController.text.isEmpty ||
-        passwordEditingController.text.length < 6) {
+    if (password.isEmpty || password.length < 6) {
       setState(() {
         errorMessage =
             "This password is too short. Create a longer password with at least six letters and numbers";
@@ -32,6 +33,8 @@ class _SetPasswordState extends State<SetPassword> {
     setState(() {
       errorMessage = null;
     });
+    ref.read(signupProvider.notifier).setPassword(password);
+    print("Password: ${ref.watch(signupProvider).password}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => DateOfBirth()),

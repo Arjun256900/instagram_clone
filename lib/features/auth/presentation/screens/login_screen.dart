@@ -9,6 +9,7 @@ import 'package:instagram/features/auth/presentation/widgets/custom_text_field.d
 import 'package:http/http.dart' as http;
 import 'package:instagram/features/auth/presentation/widgets/general_error.dart';
 import 'package:instagram/features/feed/presentations/screens/HomeScreen.dart';
+import '../../../../core/utils/token_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var isLoading = false;
   var isLoginGeneralError = false;
   String? loginGeneralError;
+  final _tokenStorage = TokenStorage();
 
   void validateInput() async {
     setState(() {
@@ -58,7 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
           final data = jsonDecode(result.body);
           final authToken = data['accessToken'];
           final refreshToken = data['refreshToken'];
-          // TODO : SAVE TOKENS
+          // Store tokens
+          await _tokenStorage.saveTokens(
+            accessToken: authToken,
+            refreshToken: refreshToken,
+          );
           Navigator.push(
             context,
             CupertinoPageRoute(builder: (context) => Homescreen()),

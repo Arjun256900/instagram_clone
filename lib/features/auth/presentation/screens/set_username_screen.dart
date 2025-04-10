@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/terms_and_policy_screen.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SetUsernameScreen extends StatefulWidget {
+class SetUsernameScreen extends ConsumerStatefulWidget {
   const SetUsernameScreen({super.key});
 
   @override
-  State<SetUsernameScreen> createState() => _SetUsernameScreenState();
+  ConsumerState<SetUsernameScreen> createState() => _SetUsernameScreenState();
 }
 
-class _SetUsernameScreenState extends State<SetUsernameScreen> {
+class _SetUsernameScreenState extends ConsumerState<SetUsernameScreen> {
   final usernameEditingController = TextEditingController();
   String? errorMessage;
   bool hasTriedToSubmit = false;
@@ -30,6 +32,8 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
     setState(() {
       errorMessage = null;
     });
+    ref.read(signupProvider.notifier).setUsername(username);
+    print("Username : ${ref.watch(signupProvider).username}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => TermsAndPolicyScreen()),

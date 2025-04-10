@@ -1,27 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_username_screen.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SetNameScreen extends StatefulWidget {
+class SetNameScreen extends ConsumerStatefulWidget {
   const SetNameScreen({super.key});
 
   @override
-  State<SetNameScreen> createState() => _SetNameScreenState();
+  ConsumerState<SetNameScreen> createState() => _SetNameScreenState();
 }
 
-class _SetNameScreenState extends State<SetNameScreen> {
+class _SetNameScreenState extends ConsumerState<SetNameScreen> {
   final nameEditingController = TextEditingController();
   String? errorMessage;
   bool hasTriedToSubmit = false;
 
   void validateInput() {
     hasTriedToSubmit = true;
-    if (nameEditingController.text.isEmpty ||
-        nameEditingController.text.trim().length < 2) {
+    final name = nameEditingController.text.trim();
+    if (name.isEmpty || name.length < 2) {
       setState(() {
         errorMessage = 'Your name must be of at least two letters long';
       });
@@ -30,6 +32,8 @@ class _SetNameScreenState extends State<SetNameScreen> {
     setState(() {
       errorMessage = null;
     });
+    ref.read(signupProvider.notifier).setName(name);
+    print("Name : ${ref.watch(signupProvider).name}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetUsernameScreen()),

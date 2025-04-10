@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_password.dart';
 import 'dart:ui';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {  
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final mobileEmailController = TextEditingController();
   var isMobile = true;
   bool isLoading = false;
@@ -35,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void validateInput() {
     hasTriedToSignUp = true;
-    String input = mobileEmailController.text;
+    String input = mobileEmailController.text.trim();
     if (isMobile) {
       if (!phoneRegex.hasMatch(input)) {
         setState(() {
@@ -62,28 +64,34 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       errorMessage = null;
     });
-    print("Successfully validated the input : $input");
+    if (isMobile) ref.read(signupProvider.notifier).setMobile(input);
+    if (isMobile == false) ref.read(signupProvider.notifier).setEmail(input);
+    ref.read(signupProvider.notifier).setIsMobile(!isMobile);
+    print("Printing");
+    print(ref.watch(signupProvider).mobile);
+    print(ref.watch(signupProvider).email);
+    print(ref.watch(signupProvider).isMobile);
     Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) => SetPassword(isMobile: isMobile)),
+      CupertinoPageRoute(builder: (context) => SetPassword()),
     );
   }
 
   void toggleSignupMethod() async {
     setState(() {
-      isLoading = true; // Show loading spinner
+      isLoading = true;
     });
 
     await Future.delayed(
       const Duration(milliseconds: 700),
     ); // Simulate loading delay
-
     setState(() {
       isMobile = !isMobile;
       isLoading = false;
       mobileEmailController.text = "";
       errorMessage = null;
     });
+    ref.read(signupProvider.notifier).setIsMobile(!isMobile);
   }
 
   @override

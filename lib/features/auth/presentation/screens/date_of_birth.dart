@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_name_screen.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:intl/intl.dart'; // for date formatting
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DateOfBirth extends StatefulWidget {
+class DateOfBirth extends ConsumerStatefulWidget {
   const DateOfBirth({super.key});
 
   @override
-  State<DateOfBirth> createState() => _DateOfBirthState();
+  ConsumerState<DateOfBirth> createState() => _DateOfBirthState();
 }
 
-class _DateOfBirthState extends State<DateOfBirth> {
+class _DateOfBirthState extends ConsumerState<DateOfBirth> {
   DateTime? selectedDate;
   String? errorMessage;
   bool hasTriedToSubmit = false;
@@ -49,6 +51,12 @@ class _DateOfBirthState extends State<DateOfBirth> {
     setState(() {
       errorMessage = null;
     });
+    String formattedDate =
+        selectedDate == null
+            ? ''
+            : DateFormat('d MMMM yyyy').format(selectedDate!);
+    ref.read(signupProvider.notifier).setDob(formattedDate);
+    print("DOB: ${ref.watch(signupProvider).dob}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetNameScreen()),
