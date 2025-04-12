@@ -63,8 +63,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/ig_logo_dark.png 
-    - assets/ig_logo_light.png
+    - assets/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
