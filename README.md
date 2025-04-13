@@ -3,11 +3,8 @@
 A full-fledged Instagram clone built from scratch using Flutter, Microservices, Firebase, MongoDB, Socket.io, Docker, Kubernetes, and WebRTC.
 Supports light/dark mode, pixel-perfect UI, custom theme-aware icons, and scalable architecture.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
 ## Features
+
 - Pixel-perfect Instagram-style UI
 - Dark/Light theme support (auto-detect system theme)
 - Custom icons for theme-aware toggle states
@@ -17,12 +14,14 @@ This project is a starting point for a Flutter application.
 - Coming soon: Post, Reels, Stories, DM (real-time), and AI Captioning
 
 ## Tech Stack
+
 | Frontend | Backend | Realtime | Storage | Infra |
 | -------- | ------- | -------- | ------- | ----- |
 | Flutter  | Node.js(mircoservices) | Socket.io | Firebase Storage | Docker + Kubernetes |
 | Riverpod | MongoDB | JWT Auth |         | CI/CD (soon)
 
 ## Development diary
+
 | Date | Update |
 | ---- | ------ | 
 | 31st March 2025 | Flutter UI microservices initialized |
@@ -35,6 +34,7 @@ This project is a starting point for a Flutter application.
 | 12th April | Started the second UI microservice (User profile screen) |
 
 ## What's next?
+
  - Post upload UI
  - Feed & infinite scroll
  - AI-powered captioning (GPT microservice)
@@ -45,11 +45,17 @@ This project is a starting point for a Flutter application.
  -  Deploy on Render/Heroku or self-host
 
 ## Contributing
+
 TBD once backend is up. Will open issues + provide guidelines.
 
 ## Author
-👨‍💻 Made with 💪 and ☕ by [Arjun](https://github.com/Arjun256900)
-⭐️ If you find this project helpful, give it a star!” and “Feel free to open issues or PRs.
+
+- 👨‍💻 Made with 💪 and ☕ by [Arjun](https://github.com/Arjun256900)
+- ⭐️ If you find this project helpful, give it a star!” and “Feel free to open issues or PRs.
+
+## Licence
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## A few resources to get you started if this is your first Flutter project:
 
