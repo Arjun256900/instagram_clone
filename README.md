@@ -47,6 +47,9 @@ This project is a starting point for a Flutter application.
 ## Contributing
 TBD once backend is up. Will open issues + provide guidelines.
 
+## Author
+👨‍💻 Made with 💪 and ☕ by [Arjun](https://github.com/Arjun256900)
+⭐️ If you find this project helpful, give it a star!” and “Feel free to open issues or PRs.
 
 ## A few resources to get you started if this is your first Flutter project:
 
