@@ -6,6 +6,17 @@
 A full-fledged Instagram clone built from scratch using Flutter, Microservices, Firebase, MongoDB, Socket.io, Docker, Kubernetes, and WebRTC.
 > Disclaimer: This is a personal educational project and is not affiliated with Instagram™ or Meta Platforms.
 
+## 🔥 Screenshots
+
+### 🧾 Login Page
+<img src="screenshots/login.png" height="800"/>
+
+### 🧾 Signup Page
+<img src="screenshots/signup.jpg" height="800"/>
+
+### 🧾 User profile Page
+<img src="screenshots/profile.jpg" height="800"/>
+
 ## Getting Started
 1. `git clone https://github.com/Arjun/instagram_clone.git`
 2. `cd instagram_clone`
