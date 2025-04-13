@@ -1,7 +1,17 @@
+![Flutter](https://img.shields.io/badge/Flutter-3.29.2-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
 # InstaClone – Fullstack Instagram Clone
 
 A full-fledged Instagram clone built from scratch using Flutter, Microservices, Firebase, MongoDB, Socket.io, Docker, Kubernetes, and WebRTC.
-Supports light/dark mode, pixel-perfect UI, custom theme-aware icons, and scalable architecture.
+> Disclaimer: This is a personal educational project and is not affiliated with Instagram™ or Meta Platforms.
+
+## Getting Started
+1. `git clone https://github.com/Arjun/instagram_clone.git`
+2. `cd instagram_clone`
+3. `flutter pub get`
+4. `Start an emulator (works best with an emulator)`
+5. `flutter run`
 
 ## Features
 
@@ -48,14 +58,33 @@ Supports light/dark mode, pixel-perfect UI, custom theme-aware icons, and scalab
 
 TBD once backend is up. Will open issues + provide guidelines.
 
+## 📚 What I’m Learning
+
+This project is helping me build:
+- Real-world microservices with auth, file storage, real-time features (DM and videocalls), and rate limiting
+- Secure JWT-based login flows
+- Flutter UI best practices (responsive design + dark mode)
+- CI/CD pipelines (coming soon, TBD)
+This will be my **flagship project** for my resume.
+
 ## Author
 
 - 👨‍💻 Made with 💪 and ☕ by [Arjun](https://github.com/Arjun256900)
-- ⭐️ If you find this project helpful, give it a star!” and “Feel free to open issues or PRs.
+- ⭐️ If you find this project helpful, give it a star! and feel free to open issues or PRs.
 
 ## Licence
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Built with
+- [Flutter](https://flutter.dev/)
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Socket.io](https://socket.io/)
+- [WebRTC](https://webrtc.org/)
+- [Docker](https://www.docker.com/)
+- [Nginx](https://nginx.org/)
 
 ## A few resources to get you started if this is your first Flutter project:
 
