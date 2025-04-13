@@ -9,13 +9,13 @@ A full-fledged Instagram clone built from scratch using Flutter, Microservices, 
 ## 🔥 Screenshots
 
 ### 🧾 Login Page
-<img src="screenshots/login.png" height="800"/>
+<img src="screenshots/login.jpg" height="700"/>
 
 ### 🧾 Signup Page
-<img src="screenshots/signup.jpg" height="800"/>
+<img src="screenshots/signup.jpg" height="700"/>
 
 ### 🧾 User profile Page
-<img src="screenshots/profile.jpg" height="800"/>
+<img src="screenshots/profile.jpg" height="700"/>
 
 ## Getting Started
 1. `git clone https://github.com/Arjun/instagram_clone.git`
