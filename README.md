@@ -8,13 +8,13 @@ A full-fledged Instagram clone built from scratch using Flutter, Microservices, 
 
 ## 🔥 Screenshots
 
-### 🧾 Login Page
+### 🔐 Login Page
 <img src="screenshots/login.jpg" height="700"/>
 
-### 🧾 Signup Page
+### 📝 Signup Page
 <img src="screenshots/signup.jpg" height="700"/>
 
-### 🧾 User profile Page
+### 🙍‍♂️ User profile
 <img src="screenshots/profile.jpg" height="700"/>
 
 ## Getting Started
@@ -38,21 +38,21 @@ A full-fledged Instagram clone built from scratch using Flutter, Microservices, 
 
 | Frontend | Backend | Realtime | Storage | Infra |
 | -------- | ------- | -------- | ------- | ----- |
-| Flutter  | Node.js(mircoservices) | Socket.io | Firebase Storage | Docker + Kubernetes |
+| Flutter  | Node.js(microservices) | Socket.io | Firebase Storage | Docker + Kubernetes |
 | Riverpod | MongoDB | JWT Auth |         | CI/CD (soon)
 
 ## Development diary
 
 | Date | Update |
 | ---- | ------ | 
-| 31st March 2025 | Flutter UI microservices initialized |
-| 1st April | Login and Signup UI structured |
-| 2nd April | Fully polished Login and SignUp screens |
-| 3rd April | First backend microservice (Auth) initialized and dockerized |
-| 4th April | Nginx request routing setup with rate limiting for auth endpoints |
-| 5th to 7th April | Login and SignUp logic integrated with a starters User model using MongoDB and tested with cURL |
-| 9th April | Flutter UI integration with the Auth microservice and Api Gateway microservices |
-| 12th April | Started the second UI microservice (User profile screen) |
+| ✅ 31st March 2025 | Flutter UI microservices initialized |
+| ✅ 1st April | Login and Signup UI structured |
+| ✅ 2nd April | Fully polished Login and SignUp screens |
+| ✅ 3rd April | First backend microservice (Auth) initialized and dockerized |
+| ✅ 4th April | Nginx request routing setup with rate limiting for auth endpoints |
+| ✅ 5th to 7th April | Login and SignUp logic integrated with a starters User model using MongoDB and tested with cURL |
+| ✅ 9th April | Flutter UI integration with the Auth microservice and Api Gateway microservices |
+| 🔄 12th April | Started the second UI microservice (User profile screen) |
 
 ## What's next?
 
@@ -67,7 +67,9 @@ A full-fledged Instagram clone built from scratch using Flutter, Microservices, 
 
 ## Contributing
 
-TBD once backend is up. Will open issues + provide guidelines.
+- Fork the repo
+- Create a new branch
+- Submit a PR with a clear description
 
 ## 📚 What I’m Learning
 
@@ -97,7 +99,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Docker](https://www.docker.com/)
 - [Nginx](https://nginx.org/)
 
-## A few resources to get you started if this is your first Flutter project:
+## 📦 Resources That Helped Me
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
