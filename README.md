@@ -32,7 +32,7 @@ A full-fledged Instagram clone built from scratch using Flutter, Microservices, 
 - Clean folder structure using feature-driven architecture
 - Auth screens with reusable widgets
 - Fully modular – prepped for microservice integration
-- Coming soon: Post, Reels, Stories, DM (real-time), and AI Captioning
+- Coming soon: Post, Reels, Stories, DM (real-time), and AI Captioning.
 
 ## Tech Stack
 
