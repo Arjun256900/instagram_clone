@@ -3,7 +3,7 @@
 
 # InstaClone – Fullstack Instagram Clone
 
-A full-fledged Instagram clone built from scratch using Flutter, Microservices, Firebase, MongoDB, Socket.io, Docker, Kubernetes, and WebRTC.
+A full-fledged Instagram clone built from scratch using Flutter, Microservices, Firebase, MongoDB, Socket.io, Docker, Kubernetes, and WebRTC
 > Disclaimer: This is a personal educational project and is not affiliated with Instagram™ or Meta Platforms.
 
 ## 🔥 Screenshots
