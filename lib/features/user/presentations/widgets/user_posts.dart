@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/user/presentations/widgets/EmptyUserPosts.dart';
+import 'package:instagram/features/user/presentations/widgets/EmptyUserPosts.dart';
 
 class UserPosts extends StatefulWidget {
   const UserPosts({super.key});

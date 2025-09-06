@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/features/feed/presentations/screens/FeedScreen.dart';
-import 'package:instagram/user/presentations/screens/user_profile.dart';
+import 'package:instagram/features/user/presentations/screens/user_profile.dart';
 import '../../../../core/constants/home_nav_constants.dart';
 
 class Homescreen extends StatefulWidget {

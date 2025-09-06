@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_colors.dart';
-import 'package:instagram/user/presentations/widgets/profile_buttons.dart';
-import 'package:instagram/user/presentations/widgets/user_posts.dart';
+import 'package:instagram/features/feed/presentations/screens/settings_activity.dart';
+import 'package:instagram/features/user/presentations/widgets/profile_buttons.dart';
+import 'package:instagram/features/user/presentations/widgets/user_posts.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -59,13 +61,20 @@ class _UserProfileState extends State<UserProfile> {
             height: 70,
             width: 70,
           ),
-          Image.asset(
-            isDark
-                ? 'assets/profile_more_dark.png'
-                : 'assets/profile_more_light.png',
-            fit: BoxFit.contain,
-            height: 70,
-            width: 70,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                CupertinoPageRoute(builder: (context) => SettingsActivity()),
+              );
+            },
+            child: Image.asset(
+              isDark
+                  ? 'assets/profile_more_dark.png'
+                  : 'assets/profile_more_light.png',
+              fit: BoxFit.contain,
+              height: 70,
+              width: 70,
+            ),
           ),
         ],
       ),

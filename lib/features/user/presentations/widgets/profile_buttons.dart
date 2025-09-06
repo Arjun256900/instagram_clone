@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_colors.dart';
+import 'package:instagram/features/user/presentations/screens/edit_profile.dart';
+import 'package:instagram/features/user/presentations/screens/share_profile.dart';
 
 class ProfileButtons extends StatefulWidget {
   const ProfileButtons({super.key});
@@ -17,7 +20,12 @@ class _ProfileButtonsState extends State<ProfileButtons> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => EditProfile()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               elevation: 0.0,
@@ -39,7 +47,12 @@ class _ProfileButtonsState extends State<ProfileButtons> {
         const SizedBox(width: 15),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => ShareProfile()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               elevation: 0.0,
