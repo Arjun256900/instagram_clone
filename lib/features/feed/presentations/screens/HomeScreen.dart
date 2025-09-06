@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/features/feed/presentations/screens/FeedScreen.dart';
+import 'package:instagram/features/reels/presentations/screens/reel_screen.dart';
 import 'package:instagram/features/user/presentations/screens/user_profile.dart';
 import '../../../../core/constants/home_nav_constants.dart';
 
@@ -17,7 +18,7 @@ class _HomescreenState extends State<Homescreen> {
     Feedscreen(),
     Center(child: Text("Search")),
     Center(child: Text("Reels")),
-    Center(child: Text("Shop")),
+    ReelScreen(),
     UserProfile(),
   ];
 
