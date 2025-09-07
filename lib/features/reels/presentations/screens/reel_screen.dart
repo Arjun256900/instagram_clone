@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/features/reels/presentations/screens/new_group_screen.dart';
 import 'package:instagram/features/comments/presentations/screens/comment_modal.dart';
+import 'package:instagram/features/reels/presentations/widgets/more_option.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:marquee/marquee.dart';
@@ -637,6 +638,173 @@ class _ReelScreenState extends State<ReelScreen> {
     );
   }
 
+  void _showMoreModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (BuildContext ctx) {
+        final isDark = Theme.of(ctx).brightness == Brightness.dark;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 12,
+              left: 16,
+              right: 16,
+              bottom: 24,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Drag handle
+                Container(
+                  width: 44,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(height: 18),
+
+                // Top circular options row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MoreOption(
+                      icon: Icons.bookmark_outline,
+                      label: "Save",
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        // handle Save
+                      },
+                    ),
+                    MoreOption(
+                      iconWidget: const FaIcon(
+                        FontAwesomeIcons.creativeCommonsRemix,
+                        size: 22,
+                      ),
+                      label: "Remix",
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        // handle Remix
+                      },
+                    ),
+                    MoreOption(
+                      icon: Icons.add,
+                      label: "Sequence",
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        // handle Sequence
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+                // Use Flexible with SingleChildScrollView so sheet can grow if needed
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildListTile(
+                          icon: Icons.fullscreen,
+                          text: "View fullscreen",
+                          onTap: () {
+                            Navigator.of(ctx).pop();
+                          },
+                        ),
+                        _buildListTile(
+                          icon: Icons.info_outline,
+                          text: "Why you're seeing this post",
+                          onTap: () => Navigator.of(ctx).pop(),
+                        ),
+                        _buildListTile(
+                          icon: Icons.remove_red_eye_outlined,
+                          text: "Interested",
+                          onTap: () => Navigator.of(ctx).pop(),
+                        ),
+                        _buildListTile(
+                          icon: Icons.visibility_off,
+                          text: "Not interested",
+                          onTap: () => Navigator.of(ctx).pop(),
+                        ),
+
+                        // Report row (red)
+                        ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          onTap: () {
+                            Navigator.of(ctx).pop();
+                            // handle report
+                          },
+                          leading: Container(
+                            width: 44,
+                            height: 44,
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.report,
+                              color: Colors.red,
+                              size: 35,
+                            ),
+                          ),
+                          title: Text(
+                            "Report...",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Final item
+                        _buildListTile(
+                          icon: Icons.tune,
+                          text: "Manage content preferences",
+                          onTap: () => Navigator.of(ctx).pop(),
+                          trailing: const Icon(Icons.chevron_right),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// small helper for standard list tiles
+  Widget _buildListTile({
+    required IconData icon,
+    required String text,
+    VoidCallback? onTap,
+    Widget? trailing,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+      leading: Container(
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
+        child: Icon(icon, size: 35),
+      ),
+      title: Text(
+        text,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+      trailing: trailing,
+    );
+  }
+
   Widget _buildRightActionColumn(int index) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -670,12 +838,30 @@ class _ReelScreenState extends State<ReelScreen> {
             _showShareModal(context);
           },
         ),
-        _buildActionButton(icon: Icons.more_vert, onTap: () {}),
+        _buildActionButton(
+          icon: Icons.more_vert,
+          onTap: () {
+            _showMoreModal(context);
+          },
+        ),
         const SizedBox(height: 12),
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: Colors.grey[800],
-          child: const Icon(Icons.music_note, color: Colors.white, size: 20),
+        Container(
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+              width: 3, // thicker border
+            ),
+            borderRadius: BorderRadius.circular(7),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Image.network(
+              'https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80',
+              fit: BoxFit.cover, // fills the container
+            ),
+          ),
         ),
       ],
     );
@@ -855,7 +1041,7 @@ class _ReelScreenState extends State<ReelScreen> {
                     ),
 
                     Positioned(
-                      bottom: 20,
+                      bottom: 0,
                       left: 16,
                       right: 80,
                       child: _buildBottomInfo(index),
