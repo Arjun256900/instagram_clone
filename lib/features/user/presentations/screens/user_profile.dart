@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_colors.dart';
-import 'package:instagram/features/feed/presentations/screens/settings_activity.dart';
+import 'package:instagram/features/user/presentations/screens/settings_activity.dart';
 import 'package:instagram/features/user/presentations/widgets/profile_buttons.dart';
 import 'package:instagram/features/user/presentations/widgets/user_posts.dart';
 

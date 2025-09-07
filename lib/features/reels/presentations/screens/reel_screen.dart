@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/features/reels/presentations/screens/new_group_screen.dart';
-import 'package:instagram/features/reels/presentations/widgets/comment_modal.dart';
+import 'package:instagram/features/comments/presentations/screens/comment_modal.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:marquee/marquee.dart';
@@ -116,7 +116,7 @@ class _ReelScreenState extends State<ReelScreen> {
   }
 
   Future<void> _initializePage(int index) async {
-    if (index < _videoControllers.length && _videoControllers[index] != null) {
+    if (index < _videoControllers.length) {
       await _chewieControllers[index].play();
       setState(() {
         _isVideoInitialized[index] = true;
@@ -164,9 +164,7 @@ class _ReelScreenState extends State<ReelScreen> {
     });
     // Update volume for all initialized controllers (i.e all reels which the user has loaded before)
     for (var controller in _videoControllers) {
-      if (controller != null) {
-        controller.setVolume(_isMuted ? 0.0 : 1.0);
-      }
+      controller.setVolume(_isMuted ? 0.0 : 1.0);
     }
   }
 

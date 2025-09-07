@@ -10,7 +10,6 @@ class CommentModal extends StatefulWidget {
 class _CommentModalState extends State<CommentModal> {
   @override
   Widget build(BuildContext context) {
-    // ✨ MODIFIED: The key to making the modal theme-aware
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return DraggableScrollableSheet(
@@ -121,7 +120,6 @@ class _CommentModalState extends State<CommentModal> {
 
         return Container(
           decoration: BoxDecoration(
-            // ✨ MODIFIED: Dynamic background color
             color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
@@ -134,7 +132,6 @@ class _CommentModalState extends State<CommentModal> {
                   height: 4,
                   width: 72,
                   decoration: BoxDecoration(
-                    // ✨ MODIFIED: Dynamic handle color
                     color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -146,7 +143,6 @@ class _CommentModalState extends State<CommentModal> {
               Text(
                 'Comments',
                 style: TextStyle(
-                  // ✨ MODIFIED: Dynamic text color
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
@@ -173,14 +169,12 @@ class _CommentModalState extends State<CommentModal> {
                           // Avatar
                           CircleAvatar(
                             radius: 18,
-                            // ✨ MODIFIED: Dynamic avatar background
                             backgroundColor:
                                 isDarkMode
                                     ? Colors.grey[800]
                                     : Colors.grey[200],
                             child: Icon(
                               Icons.person,
-                              // ✨ MODIFIED: Dynamic avatar icon color
                               color:
                                   isDarkMode ? Colors.white24 : Colors.black26,
                               size: 20,
@@ -199,7 +193,6 @@ class _CommentModalState extends State<CommentModal> {
                                     Text(
                                       c['user'] as String,
                                       style: TextStyle(
-                                        // ✨ MODIFIED: Dynamic username color
                                         color:
                                             isDarkMode
                                                 ? Colors.white
@@ -212,7 +205,6 @@ class _CommentModalState extends State<CommentModal> {
                                     Text(
                                       c['time'] as String,
                                       style: TextStyle(
-                                        // ✨ MODIFIED: Dynamic timestamp color
                                         color:
                                             isDarkMode
                                                 ? Colors.grey[400]
@@ -231,7 +223,6 @@ class _CommentModalState extends State<CommentModal> {
                                     child: Container(
                                       height: 150,
                                       width: double.infinity,
-                                      // ✨ MODIFIED: Dynamic placeholder background
                                       color:
                                           isDarkMode
                                               ? Colors.grey[800]
@@ -240,7 +231,6 @@ class _CommentModalState extends State<CommentModal> {
                                         child: Text(
                                           'GIF / Image',
                                           style: TextStyle(
-                                            // ✨ MODIFIED: Dynamic placeholder text color
                                             color:
                                                 isDarkMode
                                                     ? Colors.white54
@@ -257,7 +247,6 @@ class _CommentModalState extends State<CommentModal> {
                                 if ((c['text'] as String).isNotEmpty)
                                   Text(
                                     c['text'] as String,
-                                    // ✨ MODIFIED: Dynamic comment text color
                                     style: TextStyle(
                                       color:
                                           isDarkMode
@@ -295,7 +284,6 @@ class _CommentModalState extends State<CommentModal> {
                               IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.favorite_border),
-                                // ✨ MODIFIED: Dynamic icon color
                                 color: isDarkMode ? Colors.white : Colors.black,
                                 iconSize: 22,
                               ),
@@ -303,7 +291,6 @@ class _CommentModalState extends State<CommentModal> {
                               Text(
                                 c['likes'] as String,
                                 style: TextStyle(
-                                  // ✨ MODIFIED: Dynamic like count color
                                   color:
                                       isDarkMode
                                           ? Colors.grey[400]
@@ -344,12 +331,10 @@ class _CommentModalState extends State<CommentModal> {
                       // small user avatar
                       CircleAvatar(
                         radius: 18,
-                        // ✨ MODIFIED: Dynamic avatar background
                         backgroundColor:
                             isDarkMode ? Colors.grey[700] : Colors.grey[300],
                         child: Icon(
                           Icons.person,
-                          // ✨ MODIFIED: Dynamic avatar icon color
                           color: isDarkMode ? Colors.white24 : Colors.black26,
                           size: 20,
                         ),
@@ -361,7 +346,6 @@ class _CommentModalState extends State<CommentModal> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            // ✨ MODIFIED: Dynamic text field background
                             color:
                                 isDarkMode
                                     ? const Color(0xFF2A2A2A)
@@ -372,7 +356,6 @@ class _CommentModalState extends State<CommentModal> {
                             children: [
                               Expanded(
                                 child: TextField(
-                                  // ✨ MODIFIED: Dynamic text and hint styles
                                   style: TextStyle(
                                     color:
                                         isDarkMode
@@ -396,7 +379,6 @@ class _CommentModalState extends State<CommentModal> {
                               IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.emoji_emotions_outlined),
-                                // ✨ MODIFIED: Dynamic icon color
                                 color: isDarkMode ? Colors.white : Colors.black,
                               ),
 
@@ -404,7 +386,6 @@ class _CommentModalState extends State<CommentModal> {
                               IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.card_giftcard_outlined),
-                                // ✨ MODIFIED: Dynamic icon color
                                 color: isDarkMode ? Colors.white : Colors.black,
                               ),
                             ],
