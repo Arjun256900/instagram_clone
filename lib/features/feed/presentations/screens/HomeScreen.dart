@@ -17,7 +17,7 @@ class _HomescreenState extends State<Homescreen> {
   final List<Widget> _screens = [
     Feedscreen(),
     Center(child: Text("Search")),
-    Center(child: Text("Reels")),
+    Center(child: Text("Add post")),
     ReelScreen(),
     UserProfile(),
   ];
@@ -51,32 +51,35 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    // ✨ MODIFIED: New variable to control the nav bar's theme
+    final bool isNavBarDark = isDark || _selectedIndex == 3;
 
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
+        color: isNavBarDark ? Colors.black : Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(
-              iconMap: isDark ? homeIconMapDark : homeIconMapLight,
+              iconMap: isNavBarDark ? homeIconMapDark : homeIconMapLight,
               index: 0,
             ),
             _buildNavItem(
-              iconMap: isDark ? searchIconMapDark : searchIconMapLight,
+              iconMap: isNavBarDark ? searchIconMapDark : searchIconMapLight,
               index: 1,
             ),
             _buildNavItem(
-              iconMap: isDark ? addPostIconMapDark : addPostIconMapLight,
+              iconMap: isNavBarDark ? addPostIconMapDark : addPostIconMapLight,
               index: 2,
             ),
             _buildNavItem(
-              iconMap: isDark ? reelsIconMapDark : reelsIconMapLight,
+              iconMap: isNavBarDark ? reelsIconMapDark : reelsIconMapLight,
               index: 3,
             ),
             _buildNavItem(
-              iconMap: isDark ? profileIconMapDark : profileIconMapLight,
+              iconMap: isNavBarDark ? profileIconMapDark : profileIconMapLight,
               index: 4,
             ),
           ],

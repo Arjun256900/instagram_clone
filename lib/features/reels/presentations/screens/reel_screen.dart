@@ -1,6 +1,10 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/reels/presentations/screens/new_group_screen.dart';
 import 'package:instagram/features/reels/presentations/widgets/comment_modal.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -49,6 +53,11 @@ class _ReelScreenState extends State<ReelScreen> {
   final List<int> _currentGradientIndexes = [];
   // state variable to store the random rotation for the heart (liking)
   final List<double> _heartRotations = [];
+
+  // for mute/unmute
+  bool _isMuted = false;
+  bool _showMuteAnimation = false;
+  int? _muteAnimationIndex; // to show mute animation only on current reel
 
   // animated like button gradients
   final List<LinearGradient> _heartGradients = [
@@ -119,6 +128,7 @@ class _ReelScreenState extends State<ReelScreen> {
       Uri.parse(_videoUrls[index]),
     );
     await videoController.initialize();
+    await videoController.setVolume(_isMuted ? 0.0 : 1.0);
 
     final chewieController = ChewieController(
       videoPlayerController: videoController,
@@ -148,6 +158,18 @@ class _ReelScreenState extends State<ReelScreen> {
     });
   }
 
+  void _toggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+    });
+    // Update volume for all initialized controllers (i.e all reels which the user has loaded before)
+    for (var controller in _videoControllers) {
+      if (controller != null) {
+        controller.setVolume(_isMuted ? 0.0 : 1.0);
+      }
+    }
+  }
+
   @override
   void dispose() {
     for (var controller in _videoControllers) {
@@ -158,6 +180,51 @@ class _ReelScreenState extends State<ReelScreen> {
     }
     _pageController.dispose();
     super.dispose();
+  }
+
+  // mute animation on tap
+  void _triggerMuteAnimation(int index) {
+    setState(() {
+      _showMuteAnimation = true;
+      _muteAnimationIndex = index;
+    });
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _showMuteAnimation = false;
+        });
+      }
+    });
+  }
+
+  // Widget for the mute icon animation at the center
+  Widget _buildMuteAnimation() {
+    return Center(
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 400),
+        opacity: _showMuteAnimation ? 1.0 : 0.0,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.7, end: _showMuteAnimation ? 1.0 : 0.7),
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.elasticOut,
+          builder: (context, scale, child) {
+            return Transform.scale(scale: scale, child: child);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.6),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              _isMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   // like on double tap
@@ -194,6 +261,339 @@ class _ReelScreenState extends State<ReelScreen> {
       ),
       builder: (BuildContext context) {
         return const CommentModal();
+      },
+    );
+  }
+
+  Widget _actionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required bool isDarkMode,
+    Color? bg,
+  }) {
+    final color =
+        bg != null ? Colors.white : (isDarkMode ? Colors.white : Colors.black);
+    final backgroundColor =
+        bg ?? (isDarkMode ? Colors.grey[800] : Colors.grey[200]);
+
+    return SizedBox(
+      width: 80,
+      height: 110, // Fixed height ensures consistent alignment
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Fixed size container for the icon
+          Container(
+            height: 64,
+            width: 64,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 28),
+          ),
+          const SizedBox(height: 8),
+          // Text with fixed height to ensure consistent spacing
+          SizedBox(
+            height: 32, // Fixed height for text area
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+                fontSize: 12,
+                height: 1.2, // Improves text alignment for multi-line text
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showShareModal(BuildContext context) {
+    final sheetController = DraggableScrollableController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          controller: sheetController,
+          initialChildSize: 0.65,
+          minChildSize: 0.55,
+          maxChildSize: 0.97,
+          expand: false,
+          builder: (context, scrollController) {
+            // (dummy contacts list remains the same)
+            final contacts = [
+              {
+                "name": "Unsuccessful abortions.",
+                "avatar": "https://i.pravatar.cc/150?img=10",
+              },
+              {"name": "Eshwar", "avatar": "https://i.pravatar.cc/150?img=11"},
+              {"name": "deepu⭐", "avatar": "https://i.pravatar.cc/150?img=12"},
+              {
+                "name": "Harish J",
+                "avatar": "https://i.pravatar.cc/150?img=13",
+              },
+              {"name": "Anu", "avatar": "https://i.pravatar.cc/150?img=14"},
+              {"name": "Lindane", "avatar": "https://i.pravatar.cc/150?img=15"},
+              {"name": "Maya", "avatar": "https://i.pravatar.cc/150?img=16"},
+              {"name": "Ravi", "avatar": "https://i.pravatar.cc/150?img=17"},
+              {"name": "Sita", "avatar": "https://i.pravatar.cc/150?img=18"},
+              {"name": "Vikram", "avatar": "https://i.pravatar.cc/150?img=19"},
+              {"name": "Nisha", "avatar": "https://i.pravatar.cc/150?img=20"},
+              {"name": "Arjun", "avatar": "https://i.pravatar.cc/150?img=21"},
+            ];
+
+            // (scroll listener logic remains the same)
+            double previousOffset = 0;
+            scrollController.addListener(() {
+              if (!scrollController.hasClients) return;
+              final offset = scrollController.offset;
+              final delta = offset - previousOffset;
+              previousOffset = offset;
+              if (delta > 8 && sheetController.size < 0.95) {
+                sheetController.animateTo(
+                  0.97,
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeInOut,
+                );
+              }
+            });
+            final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+            return SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  // ✨ MODIFIED: Dynamic background color
+                  color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // drag handle
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Container(
+                        height: 4,
+                        width: 72,
+                        decoration: BoxDecoration(
+                          // ✨ MODIFIED: Dynamic handle color
+                          color:
+                              isDarkMode ? Colors.grey[700] : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // search bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          // ✨ MODIFIED: Dynamic search bar background
+                          color:
+                              isDarkMode
+                                  ? const Color(0xFF2A2A2A)
+                                  : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            // ✨ MODIFIED: Dynamic icon and text colors
+                            Icon(
+                              Icons.search,
+                              color:
+                                  isDarkMode ? Colors.white70 : Colors.black54,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'Search',
+                                style: TextStyle(
+                                  color:
+                                      isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black54,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  CupertinoPageRoute(
+                                    builder: (context) => NewGroupScreen(),
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                Icons.person_add,
+                                color:
+                                    isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // The grid
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        child: GridView.builder(
+                          controller: scrollController,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 18,
+                                mainAxisSpacing: 18,
+                                childAspectRatio: 0.82,
+                              ),
+                          itemCount: contacts.length,
+                          physics: const ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final c = contacts[index];
+                            return GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Share to ${c["name"]} (stub)',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 36,
+                                    backgroundImage: NetworkImage(c["avatar"]!),
+                                    // ✨ MODIFIED: Dynamic fallback background
+                                    backgroundColor:
+                                        isDarkMode
+                                            ? Colors.grey[800]
+                                            : Colors.grey[200],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    width: 88,
+                                    child: Text(
+                                      c["name"]!,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        // ✨ MODIFIED: Dynamic name color
+                                        color:
+                                            isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // ✨ MODIFIED: Dynamic divider color
+                    Divider(
+                      color: isDarkMode ? Colors.white10 : Colors.black12,
+                      thickness: 1,
+                    ),
+                    const SizedBox(height: 10),
+
+                    //  bottom row of actions
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: SizedBox(
+                        height: 110,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const ScrollPhysics(),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 12),
+                              // ✨ MODIFIED: Pass isDarkMode to the helper
+                              _actionButton(
+                                icon: FontAwesomeIcons.whatsapp,
+                                label: 'WhatsApp',
+                                bg: const Color(0xFF25D366),
+                                onTap: () {},
+                                isDarkMode: isDarkMode,
+                              ),
+                              const SizedBox(width: 18),
+                              _actionButton(
+                                icon: Icons.add_circle,
+                                label: 'WhatsApp\nStatus',
+                                bg: const Color(0xFF25D366),
+                                onTap: () {},
+                                isDarkMode: isDarkMode,
+                              ),
+                              const SizedBox(width: 18),
+                              _actionButton(
+                                icon: Icons.add_box_rounded,
+                                label: 'Post in\nstory',
+                                onTap: () {},
+                                isDarkMode: isDarkMode,
+                              ),
+                              const SizedBox(width: 18),
+                              _actionButton(
+                                icon: Icons.link,
+                                label: 'Copy\nlink',
+                                onTap: () {},
+                                isDarkMode: isDarkMode,
+                              ),
+                              const SizedBox(width: 18),
+                              _actionButton(
+                                icon: Icons.share,
+                                label: 'Share',
+                                onTap: () {},
+                                isDarkMode: isDarkMode,
+                              ),
+                              const SizedBox(width: 12),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -268,7 +668,9 @@ class _ReelScreenState extends State<ReelScreen> {
         _buildActionButton(
           icon: FontAwesomeIcons.paperPlane,
           label: 'Share',
-          onTap: () {},
+          onTap: () {
+            _showShareModal(context);
+          },
         ),
         _buildActionButton(icon: Icons.more_vert, onTap: () {}),
         const SizedBox(height: 12),
@@ -415,15 +817,9 @@ class _ReelScreenState extends State<ReelScreen> {
                   );
                 },
                 onTap: () {
-                  if (_chewieControllers.length > index &&
-                      _chewieControllers[index] != null) {
-                    final controller = _chewieControllers[index];
-                    if (controller.isPlaying) {
-                      controller.pause();
-                    } else {
-                      controller.play();
-                    }
-                  }
+                  // Mute/unmute on tap
+                  _toggleMute();
+                  _triggerMuteAnimation(index);
                 },
                 child: Stack(
                   alignment: Alignment.bottomCenter,
@@ -439,6 +835,9 @@ class _ReelScreenState extends State<ReelScreen> {
                       ),
 
                     _buildAnimatedHeart(index),
+
+                    if (_showMuteAnimation && _muteAnimationIndex == index)
+                      _buildMuteAnimation(),
 
                     if (_isCaptionExpanded[index])
                       GestureDetector(

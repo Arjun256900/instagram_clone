@@ -10,13 +10,16 @@ class CommentModal extends StatefulWidget {
 class _CommentModalState extends State<CommentModal> {
   @override
   Widget build(BuildContext context) {
+    // ✨ MODIFIED: The key to making the modal theme-aware
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return DraggableScrollableSheet(
-      initialChildSize: 0.65, // starting height of the modal
+      initialChildSize: 0.65,
       minChildSize: 0.55,
       maxChildSize: 0.97,
       expand: false,
       builder: (context, scrollController) {
-        // placeholder comments
+        // (placeholder comments list remains the same)
         final comments = [
           {
             'avatar': null,
@@ -114,14 +117,12 @@ class _CommentModalState extends State<CommentModal> {
             'likes': '6578',
             'hasImage': true,
           },
-          // add more placeholders if needed
         ];
 
         return Container(
           decoration: BoxDecoration(
-            color: const Color(
-              0xFF1E1E1E,
-            ), // dark background close to the screenshot
+            // ✨ MODIFIED: Dynamic background color
+            color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -133,7 +134,8 @@ class _CommentModalState extends State<CommentModal> {
                   height: 4,
                   width: 72,
                   decoration: BoxDecoration(
-                    color: Colors.grey[500],
+                    // ✨ MODIFIED: Dynamic handle color
+                    color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -141,10 +143,11 @@ class _CommentModalState extends State<CommentModal> {
               const SizedBox(height: 12),
 
               // Title
-              const Text(
+              Text(
                 'Comments',
                 style: TextStyle(
-                  color: Colors.white,
+                  // ✨ MODIFIED: Dynamic text color
+                  color: isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
                 ),
@@ -170,16 +173,22 @@ class _CommentModalState extends State<CommentModal> {
                           // Avatar
                           CircleAvatar(
                             radius: 18,
-                            backgroundColor: Colors.grey[700],
-                            child: const Icon(
+                            // ✨ MODIFIED: Dynamic avatar background
+                            backgroundColor:
+                                isDarkMode
+                                    ? Colors.grey[800]
+                                    : Colors.grey[200],
+                            child: Icon(
                               Icons.person,
-                              color: Colors.white24,
+                              // ✨ MODIFIED: Dynamic avatar icon color
+                              color:
+                                  isDarkMode ? Colors.white24 : Colors.black26,
                               size: 20,
                             ),
                           ),
                           const SizedBox(width: 12),
 
-                          // Comment column (username, text, replies)
+                          // Comment column
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,16 +198,25 @@ class _CommentModalState extends State<CommentModal> {
                                   children: [
                                     Text(
                                       c['user'] as String,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
+                                      style: TextStyle(
+                                        // ✨ MODIFIED: Dynamic username color
+                                        color:
+                                            isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 13,
                                       ),
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
                                       c['time'] as String,
                                       style: TextStyle(
-                                        color: Colors.grey[400],
+                                        // ✨ MODIFIED: Dynamic timestamp color
+                                        color:
+                                            isDarkMode
+                                                ? Colors.grey[400]
+                                                : Colors.grey[600],
                                         fontSize: 12,
                                       ),
                                     ),
@@ -213,12 +231,20 @@ class _CommentModalState extends State<CommentModal> {
                                     child: Container(
                                       height: 150,
                                       width: double.infinity,
-                                      color: Colors.grey[800],
-                                      child: const Center(
+                                      // ✨ MODIFIED: Dynamic placeholder background
+                                      color:
+                                          isDarkMode
+                                              ? Colors.grey[800]
+                                              : Colors.grey[200],
+                                      child: Center(
                                         child: Text(
                                           'GIF / Image',
                                           style: TextStyle(
-                                            color: Colors.white54,
+                                            // ✨ MODIFIED: Dynamic placeholder text color
+                                            color:
+                                                isDarkMode
+                                                    ? Colors.white54
+                                                    : Colors.black54,
                                           ),
                                         ),
                                       ),
@@ -231,46 +257,57 @@ class _CommentModalState extends State<CommentModal> {
                                 if ((c['text'] as String).isNotEmpty)
                                   Text(
                                     c['text'] as String,
-                                    style: const TextStyle(color: Colors.white),
+                                    // ✨ MODIFIED: Dynamic comment text color
+                                    style: TextStyle(
+                                      color:
+                                          isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                      fontSize: 15,
+                                    ),
                                   ),
 
                                 const SizedBox(height: 8),
 
-                                // "Antworten" text
+                                // "Reply" text
                                 Text(
                                   'Reply',
                                   style: TextStyle(
-                                    color: Colors.grey[400],
+                                    // ✨ MODIFIED: Dynamic reply text color
+                                    color:
+                                        isDarkMode
+                                            ? Colors.grey[400]
+                                            : Colors.grey[600],
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
-                                // Optional: show "x weitere Antworten ansehen"
-                                // (for now we show none; add logic later)
                               ],
                             ),
                           ),
 
                           const SizedBox(width: 8),
 
-                          // Like count + heart icon (right side)
+                          // Like count + heart icon
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                onPressed: () {
-                                  // hook up like logic
-                                },
+                                onPressed: () {},
                                 icon: const Icon(Icons.favorite_border),
-                                color: Colors.white,
+                                // ✨ MODIFIED: Dynamic icon color
+                                color: isDarkMode ? Colors.white : Colors.black,
                                 iconSize: 22,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 c['likes'] as String,
                                 style: TextStyle(
-                                  color: Colors.grey[400],
+                                  // ✨ MODIFIED: Dynamic like count color
+                                  color:
+                                      isDarkMode
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
                                   fontSize: 12,
                                 ),
                               ),
@@ -284,9 +321,12 @@ class _CommentModalState extends State<CommentModal> {
               ),
 
               // Divider above input
-              Container(height: 1, color: Colors.grey[800]),
+              Container(
+                height: 1,
+                color: isDarkMode ? Colors.grey[800] : Colors.grey[300],
+              ),
 
-              // Bottom input bar (safe area + adjusts for keyboard)
+              // Bottom input bar
               SafeArea(
                 top: false,
                 child: Padding(
@@ -304,10 +344,13 @@ class _CommentModalState extends State<CommentModal> {
                       // small user avatar
                       CircleAvatar(
                         radius: 18,
-                        backgroundColor: Colors.grey[700],
-                        child: const Icon(
+                        // ✨ MODIFIED: Dynamic avatar background
+                        backgroundColor:
+                            isDarkMode ? Colors.grey[700] : Colors.grey[300],
+                        child: Icon(
                           Icons.person,
-                          color: Colors.white24,
+                          // ✨ MODIFIED: Dynamic avatar icon color
+                          color: isDarkMode ? Colors.white24 : Colors.black26,
                           size: 20,
                         ),
                       ),
@@ -318,17 +361,32 @@ class _CommentModalState extends State<CommentModal> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF2A2A2A),
+                            // ✨ MODIFIED: Dynamic text field background
+                            color:
+                                isDarkMode
+                                    ? const Color(0xFF2A2A2A)
+                                    : Colors.grey[200],
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: TextField(
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: const InputDecoration(
+                                  // ✨ MODIFIED: Dynamic text and hint styles
+                                  style: TextStyle(
+                                    color:
+                                        isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                  ),
+                                  decoration: InputDecoration(
                                     hintText: 'Add a comment',
-                                    hintStyle: TextStyle(color: Colors.white60),
+                                    hintStyle: TextStyle(
+                                      color:
+                                          isDarkMode
+                                              ? Colors.white60
+                                              : Colors.black54,
+                                    ),
                                     border: InputBorder.none,
                                   ),
                                 ),
@@ -338,14 +396,16 @@ class _CommentModalState extends State<CommentModal> {
                               IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.emoji_emotions_outlined),
-                                color: Colors.white,
+                                // ✨ MODIFIED: Dynamic icon color
+                                color: isDarkMode ? Colors.white : Colors.black,
                               ),
 
                               // Gift / sticker button
                               IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.card_giftcard_outlined),
-                                color: Colors.white,
+                                // ✨ MODIFIED: Dynamic icon color
+                                color: isDarkMode ? Colors.white : Colors.black,
                               ),
                             ],
                           ),
