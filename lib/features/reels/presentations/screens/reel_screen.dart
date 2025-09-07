@@ -42,6 +42,7 @@ class _ReelScreenState extends State<ReelScreen> {
   final List<bool> _isCaptionExpanded = [];
   final List<bool> _isVideoInitialized = [];
 
+  // state variables for double tap like
   final List<bool> _isLiked = [];
   final List<bool> _showHeartAnimation = [];
   final List<Offset> _doubleTapPositions = [];
@@ -329,6 +330,7 @@ class _ReelScreenState extends State<ReelScreen> {
               ),
             ),
             const SizedBox(width: 10),
+
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -365,6 +367,31 @@ class _ReelScreenState extends State<ReelScreen> {
           ),
         ),
         const SizedBox(height: 8),
+        Row(
+          children: [
+            const Icon(Icons.music_note, size: 16, color: Colors.white),
+            const SizedBox(width: 6),
+            Expanded(
+              child: SizedBox(
+                height: 20,
+                child: Marquee(
+                  text: _musicNames[index],
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  scrollAxis: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  blankSpace: 20.0,
+                  velocity: 30.0,
+                  pauseAfterRound: const Duration(seconds: 1),
+                  startPadding: 10.0,
+                  accelerationDuration: const Duration(seconds: 1),
+                  accelerationCurve: Curves.linear,
+                  decelerationDuration: const Duration(milliseconds: 500),
+                  decelerationCurve: Curves.easeOut,
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
