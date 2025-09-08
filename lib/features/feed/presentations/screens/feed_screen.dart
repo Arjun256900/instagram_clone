@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,32 +18,102 @@ class _FeedscreenState extends State<Feedscreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        title:
-            isDark
-                ? Image.asset('assets/ig_logo_dark.png', height: 45)
-                : SvgPicture.asset('assets/ig_logo_light.svg', height: 45),
-
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(FontAwesomeIcons.heart, size: 30),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(FontAwesomeIcons.message, size: 30),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Story widget
-              Stories(),
-              // Post widget
-              Post(),
-            ],
+      // The NestedScrollView coordinates scrolling between the app bar and the body
+      body: NestedScrollView(
+        // The headerSliverBuilder builds the app bar part
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              title:
+                  isDark
+                      ? Image.asset('assets/ig_logo_dark.png', height: 45)
+                      : SvgPicture.asset(
+                        'assets/ig_logo_light.svg',
+                        height: 45,
+                      ),
+              // This makes the app bar disappear as you scroll up
+              floating: true,
+              // This makes the app bar reappear as soon as you scroll down
+              snap: true,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(FontAwesomeIcons.heart, size: 30),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(FontAwesomeIcons.message, size: 30),
+                ),
+              ],
+            ),
+          ];
+        },
+        // The body is your original scrollable content
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Story widget
+                const Stories(),
+                // Post widget
+                const Post(
+                  media: [
+                    {
+                      'type': 'image',
+                      'url':
+                          "https://images.pexels.com/photos/206359/pexels-photo-206359.jpeg?cs=srgb&dl=pexels-pixabay-206359.jpg&fm=jpg",
+                    },
+                    {
+                      'type': 'image',
+                      'url':
+                          'https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1180&q=80',
+                    },
+                    {
+                      'type': 'video',
+                      'url':
+                          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+                    },
+                    {
+                      'type': 'image',
+                      'url':
+                          'https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                    },
+                  ],
+                ),
+                const Post(
+                  media: [
+                    {
+                      'type': 'image',
+                      'url':
+                          'https://images.pexels.com/photos/11930775/pexels-photo-11930775.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                    },
+                    {
+                      'type': 'image',
+                      'url':
+                          'https://images.pexels.com/photos/11621973/pexels-photo-11621973.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                    },
+                  ],
+                ),
+                // const Post(
+                //   media: [
+                //     {
+                //       'type': 'video',
+                //       'url':
+                //           'https://www.pexels.com/video/woman-posing-while-a-man-is-sketching-3804812/',
+                //     },
+                //   ],
+                // ),
+                const Post(
+                  media: [
+                    {
+                      'type': 'image',
+                      'url':
+                          'https://images.pexels.com/photos/11621973/pexels-photo-11621973.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                    },
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

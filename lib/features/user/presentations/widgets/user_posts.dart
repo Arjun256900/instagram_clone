@@ -63,7 +63,7 @@ class _UserPostsState extends State<UserPosts>
                           : 'assets/reels_unselected_dark.png'
                       : _tabController!.index == 1
                       ? 'assets/reels_selected_dark.png'
-                      : 'assets/reels_unselected_light.png',
+                      : 'assets/reels_unselected_dark.png',
                   height: 64,
                   width: 64,
                 ),

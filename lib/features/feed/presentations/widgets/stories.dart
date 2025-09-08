@@ -103,20 +103,20 @@ class _StoriesState extends State<Stories> {
                 ? Border.all(
                   color:
                       isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
-                  width: 3.5,
+                  width: 3.2,
                 )
                 : null,
       ),
       // This padding creates the space between the ring and the avatar
       child: Padding(
-        padding: const EdgeInsets.all(3),
+        padding: const EdgeInsets.all(2.5),
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: scaffoldBgColor, // Inner background to match the screen
           ),
           // Final padding for the avatar itself
-          child: Padding(padding: const EdgeInsets.all(5.0), child: avatar),
+          child: Padding(padding: const EdgeInsets.all(3.0), child: avatar),
         ),
       ),
     );
@@ -138,7 +138,7 @@ class _StoriesState extends State<Stories> {
         itemBuilder: (context, index) {
           final item = _stories[index];
           final bool isYou = item['isYou'] == true;
-          final bool isNew = item['isNew'] == true;
+          // final bool isNew = item['isNew'] == true;
 
           return GestureDetector(
             onTap: () {
@@ -161,8 +161,8 @@ class _StoriesState extends State<Stories> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 95,
-                  width: 95,
+                  height: 86,
+                  width: 86,
                   child: Stack(
                     clipBehavior: Clip.none,
                     fit: StackFit.expand,
