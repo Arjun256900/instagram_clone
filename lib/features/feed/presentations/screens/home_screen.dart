@@ -51,7 +51,6 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    // ✨ MODIFIED: New variable to control the nav bar's theme
     final bool isNavBarDark = isDark || _selectedIndex == 3;
 
     return Scaffold(

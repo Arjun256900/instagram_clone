@@ -1,8 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:instagram/features/dm/presentation/screens/dm_screen.dart';
 import 'package:instagram/features/feed/presentations/widgets/post.dart';
 import 'package:instagram/features/feed/presentations/widgets/stories.dart';
 
@@ -31,24 +33,30 @@ class _FeedscreenState extends State<Feedscreen> {
                         'assets/ig_logo_light.svg',
                         height: 45,
                       ),
-              // This makes the app bar disappear as you scroll up
+              // This makes the app bar disappear when scroll up
               floating: true,
-              // This makes the app bar reappear as soon as you scroll down
+              // This makes the app bar reappear when scroll down
               snap: true,
               actions: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(FontAwesomeIcons.heart, size: 30),
+                  icon: const Icon(FontAwesomeIcons.heart, size: 25),
                 ),
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(FontAwesomeIcons.message, size: 30),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) => DmScreen()),
+                    );
+                  },  
+                  icon: const Icon(
+                    FontAwesomeIcons.facebookMessenger,
+                    size: 25,
+                  ),
                 ),
               ],
             ),
           ];
         },
-        // The body is your original scrollable content
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
