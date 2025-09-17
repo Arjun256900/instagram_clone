@@ -1,4 +1,5 @@
-import 'dart:async';
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';

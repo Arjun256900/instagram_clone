@@ -185,10 +185,10 @@ class DmList extends StatelessWidget {
                                 // Name
                                 Text(
                                   chat.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 15.5,
-                                    color: Colors.white,
+                                    color: isDark ? Colors.white : Colors.black,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -239,12 +239,12 @@ class DmList extends StatelessWidget {
                                   ),
                                 )
                                 : const SizedBox(width: 10, height: 10),
-                            if (chat.showCamera) SizedBox(width: 10),
+                            if (chat.showCamera) SizedBox(width: 12),
                             if (chat.showCamera)
-                              const Icon(
+                              Icon(
                                 Icons.camera_alt_outlined,
                                 size: 20,
-                                color: Color(0xFFBFC6CE),
+                                color: isDark ? Colors.white : Colors.black,
                               )
                             else
                               const SizedBox(height: 20),
