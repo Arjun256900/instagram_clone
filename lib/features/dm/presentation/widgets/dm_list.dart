@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/features/dm/presentation/screens/chat_screen.dart';
 import '../../models/chat_list_item.dart';
@@ -159,7 +160,7 @@ class DmList extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (_) => ChatScreen(name: chat.name),
                       ),
                     );
