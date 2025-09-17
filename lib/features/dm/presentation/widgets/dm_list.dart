@@ -120,147 +120,130 @@ class DmList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Messages",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Requests",
-                  style: TextStyle(
-                    color: Color(0xFF6EA8FF),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                  ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Messages",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                "Requests",
+                style: TextStyle(
+                  color: Color(0xFF6EA8FF),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
                 ),
               ),
-            ],
-          ),
-          // Expanded to give ListView a fixed height, othersise this WILL overflow.
-          Expanded(
-            child: ListView.separated(
-              itemCount: chats.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 6),
-              itemBuilder: (context, index) {
-                final chat = chats[index];
+            ),
+          ],
+        ),
+        ListView.separated(
+          physics: NeverScrollableScrollPhysics(), // sisable internal scrolling
+          shrinkWrap: true, // Take only needed space
+          itemCount: chats.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 6),
+          itemBuilder: (context, index) {
+            final chat = chats[index];
+            final messageLine =
+                chat.unseen > 0
+                    ? "${chat.unseen} new messages"
+                    : chat.lastMessage;
 
-                // If unseen > 0, show "[n] new messages" otherwise show lastMessage
-                final messageLine =
-                    chat.unseen > 0
-                        ? "${chat.unseen} new messages"
-                        : chat.lastMessage;
-
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      CupertinoPageRoute(
-                        builder: (_) => ChatScreen(name: chat.name),
-                      ),
-                    );
-                  },
-                  child: SizedBox(
-                    height: 76,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                    builder: (_) => ChatScreen(name: chat.name),
+                  ),
+                );
+              },
+              child: SizedBox(
+                height: 76,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        // Profile pic + name and message details
-                        Row(
+                        CircleAvatar(
+                          radius: 29,
+                          backgroundImage: NetworkImage(chat.avatarUrl),
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              radius: 29,
-                              backgroundImage: NetworkImage(chat.avatarUrl),
+                            Text(
+                              chat.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 15.5,
+                                color: isDark ? Colors.white : Colors.black,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(width: 12),
-                            // Name and message details
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                // Name
                                 Text(
-                                  chat.name,
+                                  messageLine,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 15.5,
                                     color: isDark ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                // message details + time ago
-                                Row(
-                                  children: [
-                                    Text(
-                                      messageLine,
-                                      style: TextStyle(
-                                        color:
-                                            isDark
-                                                ? Colors.white
-                                                : Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "· ${chat.timeAgo}",
-                                      style: TextStyle(
-                                        color:
-                                            isDark
-                                                ? Colors.white
-                                                : Colors.black,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  "· ${chat.timeAgo}",
+                                  style: TextStyle(
+                                    color: isDark ? Colors.white : Colors.black,
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        // trailing: camera and new message indicator
-                        Row(
-                          children: [
-                            // Blue dot if unseen > 0
-                            chat.unseen > 0
-                                ? Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF2EA3FF),
-                                    shape: BoxShape.circle,
-                                  ),
-                                )
-                                : const SizedBox(width: 10, height: 10),
-                            if (chat.showCamera) SizedBox(width: 12),
-                            if (chat.showCamera)
-                              Icon(
-                                Icons.camera_alt_outlined,
-                                size: 20,
-                                color: isDark ? Colors.white : Colors.black,
-                              )
-                            else
-                              const SizedBox(height: 20),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
                       ],
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+                    Row(
+                      children: [
+                        chat.unseen > 0
+                            ? Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2EA3FF),
+                                shape: BoxShape.circle,
+                              ),
+                            )
+                            : const SizedBox(width: 10, height: 10),
+                        if (chat.showCamera) const SizedBox(width: 12),
+                        if (chat.showCamera)
+                          Icon(
+                            Icons.camera_alt_outlined,
+                            size: 20,
+                            color: isDark ? Colors.white : Colors.black,
+                          )
+                        else
+                          const SizedBox(height: 20),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
