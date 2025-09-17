@@ -29,7 +29,7 @@ class _PostState extends State<Post> {
   @override
   void initState() {
     super.initState();
-    // ✨ BUG FIX: Start resolving the first media item to determine the fixed height.
+    // resolving the first media item to determine the fixed height for a multi media post
     if (widget.media.isNotEmpty) {
       _resolveFirstMediaHeight();
     }
@@ -45,7 +45,7 @@ class _PostState extends State<Post> {
     super.dispose();
   }
 
-  // ✨ BUG FIX: New method to resolve the height of the first item.
+  // method to resolve the height of the first item.
   void _resolveFirstMediaHeight() {
     final firstItem = widget.media[0];
     if (firstItem['type'] == 'image') {
@@ -55,11 +55,12 @@ class _PostState extends State<Post> {
     }
   }
 
-  // ✨ BUG FIX: Modified to optionally set the fixed carousel height.
+  // set the fixed carousel height.
   void _resolveImageForIndex(int index, {bool setCarouselHeight = false}) {
     if (widget.media[index]['type'] != 'image' ||
-        _imageAspectRatios.containsKey(index))
+        _imageAspectRatios.containsKey(index)) {
       return;
+    }
 
     final provider = NetworkImage(widget.media[index]['url']!);
     final stream = provider.resolve(const ImageConfiguration());
