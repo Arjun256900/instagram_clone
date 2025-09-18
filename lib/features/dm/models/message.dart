@@ -3,7 +3,10 @@ enum MessageType { text, post, reel, image }
 class Message {
   final String id;
   final String senderId;
-  final String? senderName;
+  final String senderName;
+  final String senderUsername;
+  final String receiverName;
+  final String receiverUsername;
   final String? avatarUrl;
   final String? text;
   final DateTime timestamp;
@@ -15,7 +18,10 @@ class Message {
   Message({
     required this.id,
     required this.senderId,
-    this.senderName,
+    required this.senderName,
+    required this.senderUsername,
+    required this.receiverName,
+    required this.receiverUsername,
     this.avatarUrl,
     this.text,
     required this.timestamp,

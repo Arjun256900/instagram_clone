@@ -25,6 +25,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '1',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Nala irukum edhiiii',
         timestamp: now.subtract(const Duration(minutes: 60)),
@@ -33,6 +37,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '2',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Oru naal vandhu paruu 😂',
         timestamp: now.subtract(const Duration(minutes: 58)),
@@ -41,6 +49,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '3',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'Aama 🤭',
         timestamp: now.subtract(const Duration(minutes: 55)),
         isMine: true,
@@ -48,6 +60,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '4',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'En clg romba small, bore adikuthu',
         timestamp: now.subtract(const Duration(minutes: 54)),
         isMine: true,
@@ -55,6 +71,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '5',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Vaaa apooo',
         timestamp: now.subtract(const Duration(minutes: 50)),
@@ -63,6 +83,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '6',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'Culturals lam nadakuma? Appo varalam',
         timestamp: now.subtract(const Duration(minutes: 47)),
         isMine: true,
@@ -70,6 +94,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '7',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Nooo boyssss😂',
         timestamp: now.subtract(const Duration(minutes: 44)),
@@ -78,6 +106,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '8',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'Ada aama laa 😂',
         timestamp: now.subtract(const Duration(minutes: 42)),
         isMine: true,
@@ -85,6 +117,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '9',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'Aprm enna koopudra 😂',
         timestamp: now.subtract(const Duration(minutes: 41)),
         isMine: true,
@@ -92,6 +128,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '10',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Temple varalaam',
         timestamp: now.subtract(const Duration(minutes: 36)),
@@ -100,6 +140,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '11',
         senderId: 'me',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         text: 'Ooooh, appo oru naal leave irukumbodhu solren',
         timestamp: now.subtract(const Duration(minutes: 22)),
         isMine: true,
@@ -107,6 +151,10 @@ class _ChatMessagesState extends State<ChatMessages> {
       Message(
         id: '12',
         senderId: 'peer',
+        senderName: "✨xhi🪄",
+        senderUsername: "__.mxhi._75",
+        receiverName: "Arjun",
+        receiverUsername: "arjuncm104",
         avatarUrl: widget.peerAvatar,
         text: 'Haaaa seriiii',
         timestamp: now.subtract(const Duration(minutes: 5)),
@@ -130,22 +178,69 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: Colors.transparent,
-        child: ListView.builder(
-          controller: _controller,
-          itemCount: messages.length,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          itemBuilder: (context, idx) {
-            final msg = messages[idx];
-            // show avatar only on first of consecutive incoming messages
-            final showAvatar =
-                !msg.isMine &&
-                (idx == 0 || messages[idx - 1].senderId != msg.senderId);
-            return MessageBubble(message: msg, showAvatar: showAvatar);
-          },
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 15),
+
+          if (widget.peerAvatar != null)
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(widget.peerAvatar!),
+            ),
+
+          const SizedBox(height: 15),
+
+          // taking peer's name from the first message they sent
+          Text(
+            messages.firstWhere((m) => !m.isMine).senderName,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          Text(
+            messages.firstWhere((m) => !m.isMine).senderUsername,
+            style: const TextStyle(color: Colors.grey, fontSize: 14),
+          ),
+
+          const SizedBox(height: 10),
+
+          // view profile button
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey[900],
+              foregroundColor: Colors.white, // White text color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              elevation: 0,
+            ),
+            child: const Text(
+              "View profile",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          // the actual messages built here
+          ListView.builder(
+            controller: _controller,
+            shrinkWrap: true,
+            itemCount: messages.length,
+            itemBuilder: (context, idx) {
+              final msg = messages[idx];
+              // avat
+              final showAvatar =
+                  !msg.isMine &&
+                  (idx == 0 || messages[idx - 1].senderId != msg.senderId);
+
+              // The itemBuilder returns the message bubble.
+              return MessageBubble(message: msg, showAvatar: showAvatar);
+            },
+          ),
+        ],
       ),
     );
   }
