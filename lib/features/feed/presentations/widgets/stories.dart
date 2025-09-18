@@ -71,6 +71,7 @@ class _StoriesState extends State<Stories> {
     startAngle: 0.0,
     endAngle: 6.28,
   );
+
   // Helper widget to build the avatar with its correct style ring
   Widget _buildStoryAvatar(
     Map<String, dynamic> story, {
@@ -80,43 +81,42 @@ class _StoriesState extends State<Stories> {
     final bool isNew = story['isNew'] == true;
     final scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
 
+    // Handle "Your story" avatar size separately and return early.
+    if (isYou) {
+      return CircleAvatar(
+        radius: 32, // Use a smaller radius for "Your story"
+        backgroundImage: NetworkImage(story['avatar']),
+        backgroundColor: isDarkMode ? Colors.grey[800] : Colors.grey[300],
+      );
+    }
+
+    // This avatar is now only for other users' stories.
     Widget avatar = CircleAvatar(
-      radius: 35,
+      radius: 35, // Keep the original radius for others
       backgroundImage: NetworkImage(story['avatar']),
       backgroundColor: isDarkMode ? Colors.grey[800] : Colors.grey[300],
     );
-
-    // Case 1: Your story (no ring needed, just the avatar)
-    if (isYou) {
-      return avatar;
-    }
 
     // This container will hold the ring (gradient or grey)
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        // Case 2: New story (apply gradient)
         gradient: isNew ? _storyGradient : null,
-        // Case 3: Viewed story (apply grey border)
-        border:
-            !isNew // viewed story ring
-                ? Border.all(
-                  color:
-                      isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
-                  width: 3.2,
-                )
+        color:
+            !isNew
+                ? (isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300)
                 : null,
       ),
       // This padding creates the space between the ring and the avatar
       child: Padding(
-        padding: const EdgeInsets.all(2.5),
+        padding: const EdgeInsets.all(3),
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: scaffoldBgColor, // Inner background to match the screen
           ),
           // Final padding for the avatar itself
-          child: Padding(padding: const EdgeInsets.all(3.0), child: avatar),
+          child: Padding(padding: const EdgeInsets.all(4.0), child: avatar),
         ),
       ),
     );
@@ -128,9 +128,9 @@ class _StoriesState extends State<Stories> {
     final scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return SizedBox(
-      height: 130, // Adjusted height for a more compact look
+      height: 130,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         scrollDirection: Axis.horizontal,
         itemCount: _stories.length,
         // gap between stories
@@ -138,7 +138,6 @@ class _StoriesState extends State<Stories> {
         itemBuilder: (context, index) {
           final item = _stories[index];
           final bool isYou = item['isYou'] == true;
-          // final bool isNew = item['isNew'] == true;
 
           return GestureDetector(
             onTap: () {
@@ -211,6 +210,7 @@ class _StoriesState extends State<Stories> {
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: isDarkMode ? Colors.white : Colors.black87,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
