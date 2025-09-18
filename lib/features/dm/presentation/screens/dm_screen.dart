@@ -16,8 +16,14 @@ class _DmScreenState extends State<DmScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? Colors.black : Colors.white;
     return Scaffold(
+      backgroundColor: backgroundColor, // Set scaffold background color
       appBar: AppBar(
+        backgroundColor: backgroundColor,
+        elevation:
+            0, // Remove shadow (that weird material design thingy google loves, for some reason)
+        scrolledUnderElevation: 0, // Prevent elevation change on scroll
         title: Text(
           "arjuncm104",
           style: TextStyle(
@@ -32,34 +38,39 @@ class _DmScreenState extends State<DmScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Column(
-          children: [
-            TextFormField(
-              style: const TextStyle(
-                color: Colors.white, // typed text color
-                fontSize: 16,
-              ),
-              decoration: InputDecoration(
-                hintText: "Ask Meta AI or Search",
-                hintStyle: const TextStyle(color: Colors.white70, fontSize: 16),
-                prefixIcon: const Icon(Icons.search, color: Colors.white70),
-                filled: true,
-                fillColor: const Color(0xFF2A2A2A),
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+      body: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Column(
+              children: [
+                TextFormField(
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  decoration: InputDecoration(
+                    hintText: "Ask Meta AI or Search",
+                    hintStyle: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                    ),
+                    prefixIcon: const Icon(Icons.search, color: Colors.white70),
+                    filled: true,
+                    fillColor: const Color(0xFF2A2A2A),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 58),
+                // music notes
+                DmNotes(),
+                // chat list
+                DmList(),
+              ],
             ),
-            const SizedBox(height: 58),
-            // Here comes the what's on your mind notes ahhhhhhh
-            DmNotes(),
-            // Expanded for a fixed height, otherwise this WILL OVERFLOW at bottom
-            Expanded(child: DmList()),
-          ],
+          ),
         ),
       ),
     );
