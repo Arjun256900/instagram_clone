@@ -1,5 +1,7 @@
 class ChatListItem {
   final String name;
+  final String? username;
+  final String chatType;
   final String avatarUrl;
   final String lastMessage;
   final String timeAgo;
@@ -8,6 +10,8 @@ class ChatListItem {
 
   ChatListItem({
     required this.name,
+    this.username,
+    required this.chatType,
     required this.avatarUrl,
     required this.lastMessage,
     required this.timeAgo,

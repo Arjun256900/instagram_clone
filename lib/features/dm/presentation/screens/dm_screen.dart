@@ -64,7 +64,9 @@ class _DmScreenState extends State<DmScreen> {
                   ),
                 ),
                 const SizedBox(height: 58),
+                // music notes
                 DmNotes(),
+                // chat list
                 DmList(),
               ],
             ),

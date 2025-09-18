@@ -9,6 +9,7 @@ class DmList extends StatelessWidget {
   final List<ChatListItem> chats = [
     ChatListItem(
       name: "Namastejuli ka Parivar ❤️",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
       lastMessage: "hey bro, check this out",
@@ -18,6 +19,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "IELTS Lesson 👩‍🏫",
+      username: "ielts.learn.english",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
       lastMessage: "uploaded new exercise",
@@ -27,6 +30,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Lindane",
+      username: "lindane_06",
+      chatType: "Personal",
       avatarUrl:
           "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=800&q=80",
       lastMessage: "Sent a reel by shrutzgupt...",
@@ -36,6 +41,7 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "OursColorfully Main Channel",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
       lastMessage: "New episode uploaded",
@@ -45,6 +51,7 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Unsuccessful abortions.",
+      chatType: "Group",
       avatarUrl:
           "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=800&q=80",
       lastMessage: "Sent a reel by crypto_tra...",
@@ -54,6 +61,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Subba jully",
+      username: "jullsub",
+      chatType: "Personal",
       avatarUrl:
           "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
       lastMessage: "Sent a reel by shrutzgupt...",
@@ -63,6 +72,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Namastejuli ka Parivar ❤️",
+      username: "namastejuli",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
       lastMessage: "hey bro, check this out",
@@ -72,6 +83,7 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "IELTS Lesson 👩‍🏫",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
       lastMessage: "uploaded new exercise",
@@ -81,6 +93,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Lindane",
+      username: "lindane_06",
+      chatType: "Personal",
       avatarUrl:
           "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=800&q=80",
       lastMessage: "Sent a reel by shrutzgupt...",
@@ -90,6 +104,7 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "OursColorfully Main Channel",
+      chatType: "Channel",
       avatarUrl:
           "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
       lastMessage: "New episode uploaded",
@@ -99,6 +114,7 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Unsuccessful abortions.",
+      chatType: "Group",
       avatarUrl:
           "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=800&q=80",
       lastMessage: "Sent a reel by crypto_tra...",
@@ -108,6 +124,8 @@ class DmList extends StatelessWidget {
     ),
     ChatListItem(
       name: "Subba jully",
+      username: "jullsub",
+      chatType: "Personal",
       avatarUrl:
           "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
       lastMessage: "Sent a reel by shrutzgupt...",
@@ -158,7 +176,7 @@ class DmList extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   CupertinoPageRoute(
-                    builder: (_) => ChatScreen(name: chat.name),
+                    builder: (_) => ChatScreen(chatListItem: chat),
                   ),
                 );
               },
