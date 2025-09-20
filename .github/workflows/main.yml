@@ -1,6 +1,5 @@
 name: Flutter CI
 
-# Trigger on PRs to main and pushes to main/feature branches
 on:
   pull_request:
     branches: [ main ]
@@ -8,6 +7,7 @@ on:
     branches:
       - main
       - 'feature-*'
+  workflow_dispatch:
 
 jobs:
   analyze:
@@ -51,10 +51,23 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     needs: test
+    # Only run the heavy release build automatically for main.
+    # But workflow_dispatch (manual) runs will still execute this job.
+    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' }}
     environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
