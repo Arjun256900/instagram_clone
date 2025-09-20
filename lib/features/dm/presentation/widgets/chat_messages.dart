@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/message.dart';
 import 'message_bubble.dart';
+import '../../data/mock_messages.dart';
 
 class ChatMessages extends StatefulWidget {
   final String? peerAvatar;
@@ -18,149 +19,11 @@ class _ChatMessagesState extends State<ChatMessages> {
   @override
   void initState() {
     super.initState();
-
-    // Mock data taken from the screenshot (left = other, right = mine)
-    final now = DateTime.now();
-    messages = [
-      Message(
-        id: '1',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Nala irukum edhiiii',
-        timestamp: now.subtract(const Duration(minutes: 60)),
-        isMine: false,
-      ),
-      Message(
-        id: '2',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Oru naal vandhu paruu 😂',
-        timestamp: now.subtract(const Duration(minutes: 58)),
-        isMine: false,
-      ),
-      Message(
-        id: '3',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'Aama 🤭',
-        timestamp: now.subtract(const Duration(minutes: 55)),
-        isMine: true,
-      ),
-      Message(
-        id: '4',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'En clg romba small, bore adikuthu',
-        timestamp: now.subtract(const Duration(minutes: 54)),
-        isMine: true,
-      ),
-      Message(
-        id: '5',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Vaaa apooo',
-        timestamp: now.subtract(const Duration(minutes: 50)),
-        isMine: false,
-      ),
-      Message(
-        id: '6',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'Culturals lam nadakuma? Appo varalam',
-        timestamp: now.subtract(const Duration(minutes: 47)),
-        isMine: true,
-      ),
-      Message(
-        id: '7',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Nooo boyssss😂',
-        timestamp: now.subtract(const Duration(minutes: 44)),
-        isMine: false,
-      ),
-      Message(
-        id: '8',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'Ada aama laa 😂',
-        timestamp: now.subtract(const Duration(minutes: 42)),
-        isMine: true,
-      ),
-      Message(
-        id: '9',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'Aprm enna koopudra 😂',
-        timestamp: now.subtract(const Duration(minutes: 41)),
-        isMine: true,
-      ),
-      Message(
-        id: '10',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Temple varalaam',
-        timestamp: now.subtract(const Duration(minutes: 36)),
-        isMine: false,
-      ),
-      Message(
-        id: '11',
-        senderId: 'me',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        text: 'Ooooh, appo oru naal leave irukumbodhu solren',
-        timestamp: now.subtract(const Duration(minutes: 22)),
-        isMine: true,
-      ),
-      Message(
-        id: '12',
-        senderId: 'peer',
-        senderName: "✨xhi🪄",
-        senderUsername: "__.mxhi._75",
-        receiverName: "Arjun",
-        receiverUsername: "arjuncm104",
-        avatarUrl: widget.peerAvatar,
-        text: 'Haaaa seriiii',
-        timestamp: now.subtract(const Duration(minutes: 5)),
-        isMine: false,
-      ),
-    ];
+    messages = messagesFromMock;
+    // rebuild the widget on scroll to update bubble gradients
+    _controller.addListener(() {
+      setState(() {});
+    });
 
     // auto scroll to bottom on build
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -168,6 +31,12 @@ class _ChatMessagesState extends State<ChatMessages> {
         _controller.jumpTo(_controller.position.maxScrollExtent);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // IMPORTANT: Dispose of the controller!
+    super.dispose();
   }
 
   @override
