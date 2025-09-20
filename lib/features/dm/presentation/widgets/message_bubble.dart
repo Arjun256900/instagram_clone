@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/message.dart';
 
 class MessageBubble extends StatelessWidget {
-  final Message message;
+  final Message message; // message model
   final bool showAvatar; // show avatar on left side (for incoming messages)
 
   const MessageBubble({
@@ -36,7 +36,7 @@ class MessageBubble extends StatelessWidget {
     // }
 
     Widget bubbleContent() {
-      // For now we only render text type. Attachments like post/reel can be implemented later.
+      // For now only render text type. Attachments like post/reel to be implemented later.
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: Column(
@@ -71,7 +71,7 @@ class MessageBubble extends StatelessWidget {
         mainAxisAlignment:
             isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          // Left side avatar for other messages
+          // Left side avatar for their messages
           if (!isMine && showAvatar)
             Padding(
               padding: const EdgeInsets.only(right: 8.0, left: 4.0),
@@ -85,6 +85,7 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
 
+          if (!isMine && !showAvatar) const SizedBox(width: 44),
           // Bubble
           Flexible(
             child: Container(

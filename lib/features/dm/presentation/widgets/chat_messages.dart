@@ -162,86 +162,69 @@ class _ChatMessagesState extends State<ChatMessages> {
       ),
     ];
 
-    // small delay to auto scroll to bottom on build
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-  }
-
-  void _scrollToBottom() {
-    if (_controller.hasClients) {
-      _controller.animateTo(
-        _controller.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut,
-      );
-    }
+    // auto scroll to bottom on build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.hasClients) {
+        _controller.jumpTo(_controller.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 15),
-
-          if (widget.peerAvatar != null)
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(widget.peerAvatar!),
-            ),
-
-          const SizedBox(height: 15),
-
-          // taking peer's name from the first message they sent
-          Text(
-            messages.firstWhere((m) => !m.isMine).senderName,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          Text(
-            messages.firstWhere((m) => !m.isMine).senderUsername,
-            style: const TextStyle(color: Colors.grey, fontSize: 14),
-          ),
-
-          const SizedBox(height: 10),
-
-          // view profile button
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey[900],
-              foregroundColor: Colors.white, // White text color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+    return ListView(
+      controller: _controller,
+      children: [
+        // Profile header
+        Column(
+          children: [
+            if (widget.peerAvatar != null)
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(widget.peerAvatar!),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              elevation: 0,
+            const SizedBox(height: 15),
+            Text(
+              messages.firstWhere((m) => !m.isMine).senderName,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            child: const Text(
-              "View profile",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              messages.firstWhere((m) => !m.isMine).senderUsername,
+              style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
-          ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[900],
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                "View profile",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+        // Messages
+        ...messages.map((msg) {
+          final index = messages.indexOf(msg);
+          final showAvatar =
+              !msg.isMine &&
+              (index == 0 || messages[index - 1].senderId != msg.senderId);
 
-          const SizedBox(height: 30),
-
-          // the actual messages built here
-          ListView.builder(
-            controller: _controller,
-            shrinkWrap: true,
-            itemCount: messages.length,
-            itemBuilder: (context, idx) {
-              final msg = messages[idx];
-              // avat
-              final showAvatar =
-                  !msg.isMine &&
-                  (idx == 0 || messages[idx - 1].senderId != msg.senderId);
-
-              // The itemBuilder returns the message bubble.
-              return MessageBubble(message: msg, showAvatar: showAvatar);
-            },
-          ),
-        ],
-      ),
+          return MessageBubble(message: msg, showAvatar: showAvatar);
+        }),
+      ],
     );
   }
 }

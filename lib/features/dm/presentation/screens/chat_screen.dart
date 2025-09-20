@@ -15,6 +15,14 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _messageController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
@@ -23,7 +31,10 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bool isTextEmpty = _messageController.text.isEmpty;
+
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Row(
           children: [
@@ -75,133 +86,169 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            children: [
-              Expanded(
-                child: ChatMessages(
-                  peerAvatar:
-                      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
-                ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          children: [
+            Expanded(
+              child: ChatMessages(
+                peerAvatar:
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  //  Expanded widget contains the text field and its internal icons
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2.5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.grey[850] : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          // Camera Icon with GestureDetector
-                          GestureDetector(
-                            onTap: () {
-                              // Camera action
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: const BoxDecoration(
-                                color: Colors.pinkAccent,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+            ),
+            const SizedBox(height: 10),
 
-                          // The actual text input field
-                          Expanded(
-                            child: TextField(
-                              controller: _messageController,
-                              style: TextStyle(
-                                color: isDark ? Colors.white : Colors.black,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: "Write a message...",
-                                border: InputBorder.none,
-                              ),
+            // Text box
+            Row(
+              children: [
+                //  Expanded widget contains the text field and its internal icons
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.grey[850] : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        // Camera Icon with GestureDetector
+                        GestureDetector(
+                          onTap: () {
+                            // Camera action
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              color: Colors.pinkAccent,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
                             ),
                           ),
+                        ),
+                        const SizedBox(width: 8),
 
-                          // Microphone Icon
-                          GestureDetector(
-                            onTap: () {
-                              // Microphone action
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                FontAwesomeIcons.microphone,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 20,
-                              ),
+                        // The actual text input field
+                        Expanded(
+                          child: TextField(
+                            controller: _messageController,
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
+                            decoration: const InputDecoration(
+                              hintText: "Write a message...",
+                              border: InputBorder.none,
                             ),
                           ),
+                        ),
 
-                          // Gallery Icon
-                          GestureDetector(
-                            onTap: () {
-                              // Gallery action
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                FontAwesomeIcons.image,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 20,
+                        if (isTextEmpty)
+                          Row(
+                            children: [
+                              // Microphone Icon
+                              GestureDetector(
+                                onTap: () {
+                                  // Microphone action
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.microphone,
+                                    color: isDark ? Colors.white : Colors.black,
+                                    size: 20,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
 
-                          // Emoji Icon
-                          GestureDetector(
-                            onTap: () {
-                              // Emoji action
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                FontAwesomeIcons.faceSmile,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 20,
+                              // Gallery Icon
+                              GestureDetector(
+                                onTap: () {
+                                  // Gallery action
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.image,
+                                    color: isDark ? Colors.white : Colors.black,
+                                    size: 20,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
 
-                          // Plus Icon
-                          GestureDetector(
-                            onTap: () {
-                              // Plus action
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                FontAwesomeIcons.circlePlus,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 20,
+                              // Emoji Icon
+                              GestureDetector(
+                                onTap: () {
+                                  // Emoji action
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.faceSmile,
+                                    color: isDark ? Colors.white : Colors.black,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+
+                              // Plus Icon
+                              GestureDetector(
+                                onTap: () {
+                                  // Plus action
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.circlePlus,
+                                    color: isDark ? Colors.white : Colors.black,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (!isTextEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                debugPrint(
+                                  'Sending message: ${_messageController.text}',
+                                );
+                                _messageController.clear();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      isDark
+                                          ? Colors.grey.shade800
+                                          : Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Icon(
+                                  Icons.send,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
         ),
       ),
     );
