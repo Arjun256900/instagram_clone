@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       return;
     }
-    print("User name: " + userName + "password: " + password);
+    debugPrint("User name: $userName, password: $password");
     setState(() {
       isLoading = !isLoading;
     });

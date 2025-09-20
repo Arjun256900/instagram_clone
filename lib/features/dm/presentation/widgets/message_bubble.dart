@@ -99,7 +99,12 @@ class MessageBubble extends StatelessWidget {
                 boxShadow: [
                   if (isMine)
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.25),
+                      color: Color.fromRGBO(
+                        0,
+                        0,
+                        0,
+                        0.25,
+                      ), // black with 25% opacity
                       offset: const Offset(0, 2),
                       blurRadius: 4,
                     ),

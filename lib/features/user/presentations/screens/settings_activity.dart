@@ -116,9 +116,7 @@ class SettingsActivity extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor:
-                    isDarkMode
-                        ? Colors.white10
-                        : Colors.black.withOpacity(0.05),
+                    isDarkMode ? Colors.white10 : Color.fromRGBO(0, 0, 0, 0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -158,7 +156,7 @@ class SettingsActivity extends StatelessWidget {
                       color:
                           isDarkMode
                               ? Colors.white10
-                              : Colors.black.withOpacity(0.05),
+                              : Color.fromRGBO(0, 0, 0, 0.05),
                     ),
                     child: Icon(
                       Icons.person_outline,

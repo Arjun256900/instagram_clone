@@ -8,12 +8,12 @@ class CollapsibleCaption extends StatefulWidget {
   final Duration animationDuration;
 
   const CollapsibleCaption({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.maxLines = 2,
     this.animationDuration = const Duration(milliseconds: 200),
-  }) : super(key: key);
+  });
 
   @override
   State<CollapsibleCaption> createState() => _CollapsibleCaptionState();

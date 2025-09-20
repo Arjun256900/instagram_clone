@@ -56,7 +56,7 @@ class _DateOfBirthState extends ConsumerState<DateOfBirth> {
             ? ''
             : DateFormat('d MMMM yyyy').format(selectedDate!);
     ref.read(signupProvider.notifier).setDob(formattedDate);
-    print("DOB: ${ref.watch(signupProvider).dob}");
+    debugPrint("DOB: ${ref.watch(signupProvider).dob}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetNameScreen()),

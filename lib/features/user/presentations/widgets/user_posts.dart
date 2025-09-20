@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/features/user/presentations/widgets/EmptyUserPosts.dart';
+import 'package:instagram/features/user/presentations/widgets/empty_user_posts.dart';
 
 class UserPosts extends StatefulWidget {
   const UserPosts({super.key});
@@ -18,7 +18,7 @@ class _UserPostsState extends State<UserPosts>
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(() {
       setState(() {});
-      print("Switched to tab ${_tabController!.index}");
+      debugPrint("Switched to tab ${_tabController!.index}");
     });
   }
 

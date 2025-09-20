@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +87,9 @@ class _PostState extends State<Post> {
   }) async {
     if (widget.media[index]['type'] != 'video' ||
         _videoControllers.containsKey(index) ||
-        _initializingVideos.contains(index))
+        _initializingVideos.contains(index)) {
       return;
+    }
 
     _initializingVideos.add(index);
     final controller = VideoPlayerController.networkUrl(
@@ -251,8 +250,8 @@ class _PostState extends State<Post> {
         decoration: BoxDecoration(
           color:
               isDarkMode
-                  ? Colors.black.withOpacity(0.6)
-                  : Colors.black.withOpacity(0.4),
+                  ? Color.fromRGBO(0, 0, 0, 0.6)
+                  : Color.fromRGBO(0, 0, 0, 0.4),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
@@ -278,8 +277,8 @@ class _PostState extends State<Post> {
           decoration: BoxDecoration(
             color:
                 isDarkMode
-                    ? Colors.black.withOpacity(0.6)
-                    : Colors.black.withOpacity(0.4),
+                    ? Color.fromRGBO(0, 0, 0, 0.6)
+                    : Color.fromRGBO(0, 0, 0, 0.4),
             shape: BoxShape.circle,
           ),
           child: Center(

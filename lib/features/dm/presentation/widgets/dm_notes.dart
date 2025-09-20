@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -12,7 +10,7 @@ class DmNotes extends StatefulWidget {
 }
 
 class _DmNotesState extends State<DmNotes> {
-  final List<Map<String, dynamic>> _DmNotes = [
+  final List<Map<String, dynamic>> _dmNotes = [
     {
       'id': 'you',
       'name': 'Your notes',
@@ -96,11 +94,11 @@ class _DmNotesState extends State<DmNotes> {
       height: 120,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: _DmNotes.length,
+        itemCount: _dmNotes.length,
         clipBehavior: Clip.none,
         separatorBuilder: (_, __) => const SizedBox(width: 15),
         itemBuilder: (context, index) {
-          final item = _DmNotes[index];
+          final item = _dmNotes[index];
           final marquee = List<String>.from(item['marquee'] ?? <String>[]);
           // final bool isYou = item['isYou'] == true;
 
@@ -136,7 +134,7 @@ class _DmNotesState extends State<DmNotes> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
+                                  color: Color.fromRGBO(0, 0, 0, 0.12), // black with 0.12 opacity
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),

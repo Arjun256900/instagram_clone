@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -78,7 +76,7 @@ class _ReelScreenState extends State<ReelScreen> {
       end: Alignment.bottomCenter,
     ),
     const LinearGradient(
-      colors: [Color(0xFFfeda75), Color(0xfef07e1), Color(0xffc13584)],
+      colors: [Color(0xFFfeda75), Color(0xFFfef07e), Color(0xFFc13584)],
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
     ),
@@ -212,7 +210,7 @@ class _ReelScreenState extends State<ReelScreen> {
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
+              color: Color.fromRGBO(0, 0, 0, 0.6),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -1028,9 +1026,7 @@ class _ReelScreenState extends State<ReelScreen> {
                         onTap: () => _toggleCaptionExpansion(index),
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                          child: Container(
-                            color: Colors.black.withOpacity(0.5),
-                          ),
+                          child: Container(color: Color.fromRGBO(0, 0, 0, 0.5)),
                         ),
                       ),
 
@@ -1055,7 +1051,7 @@ class _ReelScreenState extends State<ReelScreen> {
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.7),
+                              color: Color.fromRGBO(0, 0, 0, 0.7),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: SingleChildScrollView(

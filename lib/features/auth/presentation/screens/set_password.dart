@@ -34,7 +34,7 @@ class _SetPasswordState extends ConsumerState<SetPassword> {
       errorMessage = null;
     });
     ref.read(signupProvider.notifier).setPassword(password);
-    print("Password: ${ref.watch(signupProvider).password}");
+    debugPrint("Password: ${ref.watch(signupProvider).password}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => DateOfBirth()),

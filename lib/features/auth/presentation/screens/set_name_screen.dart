@@ -33,7 +33,7 @@ class _SetNameScreenState extends ConsumerState<SetNameScreen> {
       errorMessage = null;
     });
     ref.read(signupProvider.notifier).setName(name);
-    print("Name : ${ref.watch(signupProvider).name}");
+    debugPrint("Name : ${ref.watch(signupProvider).name}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetUsernameScreen()),

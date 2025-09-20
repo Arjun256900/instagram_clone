@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/models/signup_user_model.dart';
 
 class SignupNotifier extends StateNotifier<SignupUserModel> {
-  SignupNotifier() : super(SignupUserModel()) {}
+  SignupNotifier() : super(SignupUserModel());
   void setMobile(String mobile) {
     state = state.copyWith(mobile: mobile);
   }

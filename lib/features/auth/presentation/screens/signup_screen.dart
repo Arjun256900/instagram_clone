@@ -67,10 +67,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (isMobile) ref.read(signupProvider.notifier).setMobile(input);
     if (isMobile == false) ref.read(signupProvider.notifier).setEmail(input);
     ref.read(signupProvider.notifier).setIsMobile(!isMobile);
-    print("Printing");
-    print(ref.watch(signupProvider).mobile);
-    print(ref.watch(signupProvider).email);
-    print(ref.watch(signupProvider).isMobile);
+    debugPrint("Printing");
+    debugPrint(ref.watch(signupProvider).mobile);
+    debugPrint(ref.watch(signupProvider).email);
+    // print(ref.watch(signupProvider).isMobile);
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetPassword()),
@@ -182,7 +182,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Blur effect
                 child: Container(
-                  color: Colors.black38.withOpacity(0.3), // Dim background
+                  color: Color.fromRGBO(
+                    0,
+                    0,
+                    0,
+                    0.3,
+                  ), // black with 30% opacity; dim background
                   child: Center(
                     child: CircularProgressIndicator(
                       color: isDarkMode ? Colors.white : Colors.black,

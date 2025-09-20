@@ -399,8 +399,18 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                                       // ✨ MODIFIED: Dynamic text color
                                       color:
                                           isDarkMode
-                                              ? Colors.white.withOpacity(0.6)
-                                              : Colors.black.withOpacity(0.6),
+                                              ? Color.fromRGBO(
+                                                255,
+                                                255,
+                                                255,
+                                                0.6,
+                                              ) // white with 60% opacity
+                                              : Color.fromRGBO(
+                                                0,
+                                                0,
+                                                0,
+                                                0.6,
+                                              ), // black with 60% opacity
                                     ),
                                   ),
                                 ],
