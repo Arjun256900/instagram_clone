@@ -14,4 +14,3 @@ analyzer:
     use_super_parameters: ignore
     curly_braces_in_flow_control_structures: ignore
     prefer_interpolation_to_compose_strings: ignore
-    invalid_override_different_default_values_named: ignore
