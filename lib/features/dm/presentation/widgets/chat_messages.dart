@@ -5,14 +5,16 @@ import '../../data/mock_messages.dart';
 
 class ChatMessages extends StatefulWidget {
   final String? peerAvatar;
-  const ChatMessages({super.key, this.peerAvatar});
+  final ValueChanged<Message>? onReplyRequested;
+
+  const ChatMessages({super.key, this.peerAvatar, this.onReplyRequested});
 
   @override
   State<ChatMessages> createState() => _ChatMessagesState();
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  final ScrollController _controller = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   late final List<Message> messages;
 
@@ -21,28 +23,28 @@ class _ChatMessagesState extends State<ChatMessages> {
     super.initState();
     messages = messagesFromMock;
     // rebuild the widget on scroll to update bubble gradients
-    _controller.addListener(() {
+    _scrollController.addListener(() {
       setState(() {});
     });
 
     // auto scroll to bottom on build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_controller.hasClients) {
-        _controller.jumpTo(_controller.position.maxScrollExtent);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // IMPORTANT: Dispose of the controller!
+    _scrollController.dispose(); // IMPORTANT: Dispose of the controller!
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: _controller,
+      controller: _scrollController,
       children: [
         const SizedBox(height: 20),
         // Profile header
@@ -95,6 +97,9 @@ class _ChatMessagesState extends State<ChatMessages> {
           return MessageBubble(
             message: msg,
             showAvatar: showAvatar,
+            onReply: (message) {
+              widget.onReplyRequested?.call(message);
+            },
             prevMsgByYou:
                 index > 0 ? messages[index - 1].senderId == msg.senderId : null,
           );

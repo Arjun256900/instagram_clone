@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/features/dm/models/chat_list_item.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:instagram/features/dm/models/message.dart';
 import 'package:instagram/features/dm/presentation/widgets/chat_messages.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,6 +14,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
+  final FocusNode _inputFocus = FocusNode();
+  Message? _replyingTo;
 
   @override
   void initState() {
@@ -25,7 +28,30 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _messageController.dispose();
+    _inputFocus.dispose();
     super.dispose();
+  }
+
+  void _onReplyRequested(Message message) {
+    setState(() {
+      _replyingTo = message;
+    });
+
+    // open keyboard after swipe
+    FocusScope.of(context).requestFocus(_inputFocus);
+  }
+
+  void _sendMessage() {
+    final text = _messageController.text.trim();
+    if (text.isEmpty) return;
+
+    // send a message to backend
+    debugPrint("Send a message to backend");
+
+    setState(() {
+      _messageController.clear();
+      _replyingTo = null;
+    });
   }
 
   @override
@@ -37,6 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: isDark ? Colors.black : Colors.white,
         title: Row(
           children: [
@@ -88,18 +115,67 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 8, right: 6),
-        child: SafeArea(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 8, right: 6),
           child: Column(
             children: [
               Expanded(
                 child: ChatMessages(
+                  onReplyRequested: _onReplyRequested,
                   peerAvatar:
                       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
                 ),
               ),
               const SizedBox(height: 10),
+
+              // preview of the message you're replying to, if at all
+              if (_replyingTo != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Replying to ${_replyingTo!.senderName}",
+                              style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 12.5,
+                              ),
+                            ),
+                            Text(
+                              _replyingTo!.text ??
+                                  "media", // we'll implement media(images, gifs etc) replies later
+                              style: TextStyle(
+                                color: isDark ? Colors.white : Colors.black,
+                                fontSize: 13.5,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _replyingTo = null;
+                          });
+                        },
+                        icon: Icon(Icons.close, size: 18),
+                      ),
+                    ],
+                  ),
+                ),
 
               // Text box
               Row(
@@ -139,6 +215,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           // The actual text input field
                           Expanded(
                             child: TextField(
+                              focusNode: _inputFocus,
                               controller: _messageController,
                               style: TextStyle(
                                 color: isDark ? Colors.white : Colors.black,
@@ -223,9 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               padding: const EdgeInsets.only(left: 10.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  debugPrint(
-                                    'Sending message: ${_messageController.text}',
-                                  );
+                                  _sendMessage();
                                   _messageController.clear();
                                 },
                                 child: Container(
@@ -234,15 +309,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                     vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color:
-                                        isDark
-                                            ? Colors.grey.shade800
-                                            : Colors.grey.shade300,
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFF5D51D8),
+                                        Color(0xFF5D51D8),
+                                        Color(0xFF5D51D8),
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: const Icon(
                                     Icons.send,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     size: 20,
                                   ),
                                 ),
