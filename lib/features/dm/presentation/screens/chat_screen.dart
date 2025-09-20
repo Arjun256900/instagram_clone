@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/features/dm/data/mock_messages.dart';
 import 'package:instagram/features/dm/models/chat_list_item.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram/features/dm/models/message.dart';
@@ -45,8 +46,21 @@ class _ChatScreenState extends State<ChatScreen> {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
-    // send a message to backend
-    debugPrint("Send a message to backend");
+    final newMsg = Message(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      senderId: "me",
+      senderName: "Arjun",
+      senderUsername: "arjuncm104",
+      receiverName: "Peer",
+      receiverUsername: "mxhi",
+      timestamp: DateTime.now(),
+      isMine: true,
+      avatarUrl: peerAvatar,
+      replyingTo: _replyingTo,
+      text: text,
+    );
+
+    messagesFromMock.add(newMsg);
 
     setState(() {
       _messageController.clear();

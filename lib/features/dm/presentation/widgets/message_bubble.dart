@@ -119,7 +119,6 @@ class _MessageBubbleState extends State<MessageBubble>
     if (!_isLiked) {
       return const SizedBox.shrink();
     }
-
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -169,20 +168,105 @@ class _MessageBubbleState extends State<MessageBubble>
                 Color.fromRGBO(239, 239, 239, 1),
               ],
     );
+    Widget buildReplyPreview(
+      Message repliedMessage,
+      BorderRadius borderRadius,
+      bool isDark,
+    ) {
+      final repliedSender = repliedMessage.isMine ? "You" : "Friend";
+      final previewTextColor =
+          widget.message.isMine
+              ? Colors.white70
+              : (isDark ? Colors.grey[400] : Colors.black54);
 
-    Widget bubbleContent() {
+      return ClipRRect(
+        // Use the same border radius to clip the preview content seamlessly
+        borderRadius: borderRadius.subtract(
+          const BorderRadius.all(Radius.circular(1)),
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          // A slightly transparent background to differentiate the preview
+          color:
+              widget.message.isMine
+                  ? Colors.white.withOpacity(0.15)
+                  : Colors.black.withOpacity(0.08),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // The little vertical bar on the left of the reply
+                Container(
+                  width: 3,
+                  decoration: BoxDecoration(
+                    color:
+                        widget.message.isMine
+                            ? Color(0xFFE4436F)
+                            : Color(0xFF5D51D8),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Use Expanded to allow text to take up available space
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        repliedSender,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: previewTextColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        repliedMessage.text ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: previewTextColor,
+                          fontSize: 13.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget bubbleContent(BorderRadius borderRadius) {
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment:
+              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Conditionally add the reply preview if it exists
+            if (widget.message.replyingTo != null)
+              buildReplyPreview(
+                widget.message.replyingTo!,
+                borderRadius,
+                isDark,
+              ),
+
+            // Main message text
             if ((widget.message.text ?? '').isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 10,
-                ),
+                // Adjust padding if there is a reply preview above
+                padding:
+                    widget.message.replyingTo != null
+                        ? const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 10.0)
+                        : const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 10,
+                        ),
                 child: Text(
                   widget.message.text!,
                   style: TextStyle(
@@ -206,7 +290,14 @@ class _MessageBubbleState extends State<MessageBubble>
     Widget bubble = Container();
 
     if (isMine) {
-      final content = bubbleContent();
+      final content = bubbleContent(
+        BorderRadius.only(
+          topLeft: Radius.circular(isMine ? 18 : 22),
+          topRight: Radius.circular(isMine ? 22 : 18),
+          bottomLeft: const Radius.circular(22),
+          bottomRight: const Radius.circular(22),
+        ),
+      );
       final invisibleSizingContent = Opacity(opacity: 0.0, child: content);
       final borderRadius = BorderRadius.only(
         topLeft: Radius.circular(isMine ? 18 : 22),
@@ -322,7 +413,14 @@ class _MessageBubbleState extends State<MessageBubble>
             bottomRight: const Radius.circular(22),
           ),
         ),
-        child: bubbleContent(),
+        child: bubbleContent(
+          BorderRadius.only(
+            topLeft: Radius.circular(isMine ? 18 : 22),
+            topRight: Radius.circular(isMine ? 22 : 18),
+            bottomLeft: const Radius.circular(22),
+            bottomRight: const Radius.circular(22),
+          ),
+        ),
       );
     }
 
@@ -333,6 +431,7 @@ class _MessageBubbleState extends State<MessageBubble>
     return Padding(
       padding: EdgeInsets.only(
         top: 3.0,
+        right: 4,
         bottom: _isLiked ? 29 : (widget.prevMsgByYou == true ? 8 : 0),
         // spacing between bubbles
       ),
