@@ -63,6 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: isDark ? Colors.black : Colors.white,
         title: Row(
           children: [
@@ -114,9 +115,9 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 8, right: 6),
-        child: SafeArea(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 8, right: 6),
           child: Column(
             children: [
               Expanded(
@@ -131,8 +132,10 @@ class _ChatScreenState extends State<ChatScreen> {
               // preview of the message you're replying to, if at all
               if (_replyingTo != null)
                 Container(
-                  padding: const EdgeInsets.only(left: 7, right: 7),
-                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: isDark ? Colors.black : Colors.white,
                     borderRadius: BorderRadius.circular(8),

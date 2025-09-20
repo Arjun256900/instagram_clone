@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/message.dart';
+import 'package:flutter/services.dart';
 
 class MessageBubble extends StatefulWidget {
   final Message message; // message model
@@ -25,6 +26,7 @@ class _MessageBubbleState extends State<MessageBubble>
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _liftAnimation; // <-- New animation for movement
   bool _isLiked = false;
+  bool _hapticTriggered = false;
 
   // for swipe detection with a fixed threshold
   double _dragDx = 0.0;
@@ -150,15 +152,22 @@ class _MessageBubbleState extends State<MessageBubble>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isMine = widget.message.isMine;
     final screenWidth = MediaQuery.of(context).size.width;
     final maxWidth = screenWidth * 0.71;
 
     final maxDragDistance = screenWidth * 0.15;
-    final otherGradient = const LinearGradient(
+    final otherGradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [Color(0xFF2D2D2D), Color(0xFF1F1F1F)],
+      colors:
+          isDark
+              ? [Color(0xFF2D2D2D), Color(0xFF1F1F1F)]
+              : [
+                Color.fromRGBO(239, 239, 239, 1),
+                Color.fromRGBO(239, 239, 239, 1),
+              ],
     );
 
     Widget bubbleContent() {
@@ -177,9 +186,15 @@ class _MessageBubbleState extends State<MessageBubble>
                 child: Text(
                   widget.message.text!,
                   style: TextStyle(
-                    color: isMine ? Colors.white : Colors.grey[200],
+                    color:
+                        isMine
+                            ? Colors.white
+                            : isDark
+                            ? Colors.grey[200]
+                            : Colors.black,
                     fontSize: 15.5,
                     height: 1.2,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
@@ -358,6 +373,12 @@ class _MessageBubbleState extends State<MessageBubble>
                       maxDragDistance,
                     );
                   }
+
+                  // trigger haptic when threshold crossed
+                  if (_dragDx.abs() >= _replyThreshold && !_hapticTriggered) {
+                    HapticFeedback.lightImpact();
+                    _hapticTriggered = true;
+                  }
                 });
               },
               onHorizontalDragEnd: (details) {
@@ -369,6 +390,7 @@ class _MessageBubbleState extends State<MessageBubble>
                 }
 
                 // run snap back after drag has stopped
+                _hapticTriggered = false;
                 _runSnapBackAnimation();
               },
               onDoubleTap: () {

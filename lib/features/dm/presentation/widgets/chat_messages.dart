@@ -37,7 +37,7 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController.dispose(); // IMPORTANT: Dispose of the controller!
     super.dispose();
   }
 
