@@ -36,6 +36,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: isDark ? Colors.black : Colors.white,
         title: Row(
           children: [
             // Avatar

@@ -44,12 +44,13 @@ class _ChatMessagesState extends State<ChatMessages> {
     return ListView(
       controller: _controller,
       children: [
+        const SizedBox(height: 20),
         // Profile header
         Column(
           children: [
             if (widget.peerAvatar != null)
               CircleAvatar(
-                radius: 40,
+                radius: 50,
                 backgroundImage: NetworkImage(widget.peerAvatar!),
               ),
             const SizedBox(height: 15),
@@ -91,7 +92,12 @@ class _ChatMessagesState extends State<ChatMessages> {
               !msg.isMine &&
               (index == 0 || messages[index - 1].senderId != msg.senderId);
 
-          return MessageBubble(message: msg, showAvatar: showAvatar);
+          return MessageBubble(
+            message: msg,
+            showAvatar: showAvatar,
+            prevMsgByYou:
+                index > 0 ? messages[index - 1].senderId == msg.senderId : null,
+          );
         }),
       ],
     );
