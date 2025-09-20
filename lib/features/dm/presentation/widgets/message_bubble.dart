@@ -5,12 +5,14 @@ class MessageBubble extends StatefulWidget {
   final Message message; // message model
   final bool showAvatar; // show avatar on left side (for incoming messages)
   final bool? prevMsgByYou;
+  final ValueChanged<Message>? onReply;
 
   const MessageBubble({
     super.key,
     required this.message,
     this.showAvatar = true,
     this.prevMsgByYou,
+    this.onReply,
   });
 
   @override
@@ -18,11 +20,19 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _liftAnimation; // <-- New animation for movement
   bool _isLiked = false;
+
+  // for swipe detection with a fixed threshold
+  double _dragDx = 0.0;
+  static const double _replyThreshold = 45.0;
+
+  // for drag reset
+  late AnimationController _dragResetController;
+  late Animation<double> _dragResetAnimation;
 
   @override
   void initState() {
@@ -35,19 +45,20 @@ class _MessageBubbleState extends State<MessageBubble>
     );
 
     _controller.addStatusListener((status) {
-      // When the animation is done, call setState to redraw the widget
+      // call setState to redraw the widget when the animation is done
       if (status == AnimationStatus.completed) {
         setState(() {});
       }
     });
 
-    // Part 1: The "lift up" phase with a fast-out curve
+    // For double tap to like
+    // The "lift up" phase with a fast-out curve
     final liftUp = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(0, -1.5),
     ).chain(CurveTween(curve: Curves.easeOut));
 
-    // Part 2: The "settle down" phase with a slow-in curve
+    // The "settle down" phase with a slow-in curve
     final settleDown = Tween<Offset>(
       begin: const Offset(0, -1.5),
       end: Offset.zero,
@@ -58,7 +69,7 @@ class _MessageBubbleState extends State<MessageBubble>
       TweenSequenceItem(tween: settleDown, weight: 45.0),
     ]).animate(_controller);
 
-    // Do the same for the scale animation
+    // the same for the scale animation
     final scaleUp = Tween<double>(
       begin: 1.0,
       end: 1.6,
@@ -72,12 +83,32 @@ class _MessageBubbleState extends State<MessageBubble>
       TweenSequenceItem(tween: scaleUp, weight: 55.0),
       TweenSequenceItem(tween: scaleDown, weight: 45.0),
     ]).animate(_controller);
+
+    _dragResetController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _dragResetController.addListener(() {
+      setState(() {
+        _dragDx = _dragResetAnimation.value;
+      });
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _dragResetController.dispose();
     super.dispose();
+  }
+
+  void _runSnapBackAnimation() {
+    final startDx = _dragDx;
+    _dragResetAnimation = Tween<double>(begin: startDx, end: 0.0).animate(
+      CurvedAnimation(parent: _dragResetController, curve: Curves.easeOut),
+    );
+    _dragResetController.forward(from: 0.0);
   }
 
   // This widget now handles the "lifted" heart animation
@@ -120,8 +151,10 @@ class _MessageBubbleState extends State<MessageBubble>
   @override
   Widget build(BuildContext context) {
     final isMine = widget.message.isMine;
-    final maxWidth = MediaQuery.of(context).size.width * 0.71;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final maxWidth = screenWidth * 0.71;
 
+    final maxDragDistance = screenWidth * 0.15;
     final otherGradient = const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -155,7 +188,7 @@ class _MessageBubbleState extends State<MessageBubble>
       );
     }
 
-    Widget bubble;
+    Widget bubble = Container();
 
     if (isMine) {
       final content = bubbleContent();
@@ -278,6 +311,10 @@ class _MessageBubbleState extends State<MessageBubble>
       );
     }
 
+    final reveal = (_dragDx.abs() / _replyThreshold).clamp(0.0, 1.0);
+    final showReplyPreview = reveal > 0.02;
+    final previewWidth = (reveal * 96.0).clamp(0.0, 96.0);
+
     return Padding(
       padding: EdgeInsets.only(
         top: 3.0,
@@ -304,16 +341,99 @@ class _MessageBubbleState extends State<MessageBubble>
           if (!isMine && !widget.showAvatar) const SizedBox(width: 44),
           Flexible(
             child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onHorizontalDragUpdate: (details) {
+                setState(() {
+                  // left swipe for my messages
+                  if (isMine) {
+                    // accept negative dx, which is left swipe
+                    _dragDx = (_dragDx + details.delta.dx).clamp(
+                      -maxDragDistance,
+                      0.0,
+                    );
+                  } else {
+                    // right swipe for peer messages
+                    _dragDx = (_dragDx + details.delta.dx).clamp(
+                      0.0,
+                      maxDragDistance,
+                    );
+                  }
+                });
+              },
+              onHorizontalDragEnd: (details) {
+                // if the drag threshold crossed, trigger reply
+                if (isMine && _dragDx <= -_replyThreshold) {
+                  widget.onReply?.call(widget.message);
+                } else if (!isMine && _dragDx >= _replyThreshold) {
+                  widget.onReply?.call(widget.message);
+                }
+
+                // run snap back after drag has stopped
+                _runSnapBackAnimation();
+              },
               onDoubleTap: () {
                 setState(() {
-                  _isLiked = true;
+                  _isLiked = !_isLiked;
                   // Only play the animation if the message is liked
                   if (_isLiked) {
                     _controller.forward(from: 0.0);
                   }
                 });
               },
-              child: Stack(children: [bubble, _buildAnimatedHeart()]),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  if (showReplyPreview && !isMine)
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        width: previewWidth,
+                        child: Opacity(
+                          opacity: reveal,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.reply, size: 20),
+                              const SizedBox(height: 6),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (showReplyPreview && isMine)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        width: previewWidth,
+                        child: Opacity(
+                          opacity: reveal,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: isMine ? 16 : 0,
+                                  right: !isMine ? 16 : 0,
+                                ),
+                                child: const Icon(Icons.reply, size: 23),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  // The actual bubble, translated by drag
+                  Transform.translate(
+                    offset: Offset(_dragDx, 0),
+                    child: Stack(children: [bubble, _buildAnimatedHeart()]),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -14,6 +14,7 @@ class Message {
   final MessageType type;
   final Map<String, int>? reactions; // emoji, count (can be dynamic)
   final Map<String, dynamic>? attachment; // for post/reel metadata later TODO
+  final Message? replyingTo;
 
   Message({
     required this.id,
@@ -29,5 +30,6 @@ class Message {
     this.type = MessageType.text,
     this.reactions,
     this.attachment,
+    this.replyingTo,
   });
 }
