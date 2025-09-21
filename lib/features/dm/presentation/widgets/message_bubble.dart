@@ -25,7 +25,7 @@ class _MessageBubbleState extends State<MessageBubble>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  late Animation<Offset> _liftAnimation; // <-- New animation for movement
+  late Animation<Offset> _liftAnimation;
   bool _isLiked = false;
   bool _hapticTriggered = false;
 

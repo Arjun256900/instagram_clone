@@ -134,7 +134,12 @@ class _DmNotesState extends State<DmNotes> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.12), // black with 0.12 opacity
+                                  color: Color.fromRGBO(
+                                    0,
+                                    0,
+                                    0,
+                                    0.12,
+                                  ), // black with 0.12 opacity
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -145,44 +150,76 @@ class _DmNotesState extends State<DmNotes> {
                               children: [
                                 // Row: static animated-eq icon + marquee song title
                                 SizedBox(
-                                  height: 18,
+                                  height: 15,
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      // Static-positioned animated 3-bar music icon (not part of marquee)
+                                      // Static-positioned animated 3-bar music icon
                                       StaticEqualizer(
                                         barColor:
                                             isDarkMode
                                                 ? Colors.white
                                                 : Colors.black87,
-                                        barWidth: 3,
-                                        barSpacing: 3,
-                                        height: 12,
+                                        barWidth: 2,
+                                        barSpacing: 1.5,
+                                        height: 8,
                                       ),
-                                      const SizedBox(width: 6),
 
-                                      // Marquee for song title
+                                      // Marquee for song title with a fade-in effect
                                       Expanded(
-                                        child: SizedBox(
-                                          height: 18,
-                                          child: Marquee(
-                                            text: marquee[0],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color:
-                                                  isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black87,
+                                        child: Stack(
+                                          alignment: Alignment.centerLeft,
+                                          children: [
+                                            // song Marquee text
+                                            SizedBox(
+                                              height: 18,
+                                              child: Marquee(
+                                                text: marquee[0],
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black87,
+                                                ),
+                                                velocity: 40.0,
+                                                blankSpace: 24.0,
+                                                pauseAfterRound: const Duration(
+                                                  milliseconds: 1000,
+                                                ),
+                                                startPadding: 8.0,
+                                              ),
                                             ),
-                                            velocity: 30.0,
-                                            blankSpace: 24.0,
-                                            pauseAfterRound: const Duration(
-                                              milliseconds: 500,
+
+                                            // smooth fade overlay
+                                            Container(
+                                              height:
+                                                  18.0, // Match the Marquee's container height
+                                              width:
+                                                  12.0, // The width of the fade effect
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    // Start with the background color (fully opaque)
+                                                    isDarkMode
+                                                        ? Colors.grey[900]!
+                                                        : Colors.white,
+                                                    // End with the background color (fully transparent)
+                                                    (isDarkMode
+                                                        ? Colors.grey[900]!
+                                                            .withAlpha(0)
+                                                        : Colors.white.withAlpha(
+                                                          0,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                            startPadding: 4.0,
-                                          ),
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -204,8 +241,8 @@ class _DmNotesState extends State<DmNotes> {
                                       fontWeight: FontWeight.w500,
                                       color:
                                           (isDarkMode
-                                              ? Colors.white70
-                                              : Colors.black54),
+                                              ? Colors.white
+                                              : Colors.black),
                                     ),
                                   ),
                                 ),

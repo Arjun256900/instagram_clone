@@ -46,14 +46,20 @@ class _DmScreenState extends State<DmScreen> {
                 TextFormField(
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                   decoration: InputDecoration(
-                    hintText: "Ask Meta AI or Search",
-                    hintStyle: const TextStyle(
-                      color: Colors.white70,
+                    hintText: "Ask Meta AI or search",
+                    hintStyle: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.grey[600],
                       fontSize: 16,
                     ),
-                    prefixIcon: const Icon(Icons.search, color: Colors.white70),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: isDark ? Colors.white70 : Colors.grey[600],
+                    ),
                     filled: true,
-                    fillColor: const Color(0xFF2A2A2A),
+                    fillColor:
+                        isDark
+                            ? Color(0xFF2A2A2A)
+                            : Color.fromRGBO(239, 239, 239, 1),
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
