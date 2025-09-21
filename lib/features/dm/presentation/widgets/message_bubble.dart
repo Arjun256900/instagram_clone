@@ -177,7 +177,7 @@ class _MessageBubbleState extends State<MessageBubble>
       colors:
           screenGradient.colors
               .map(
-                (color) => Color.lerp(color, Colors.white, 0.25)!,
+                (color) => Color.lerp(color, Colors.white, 0.30)!,
               ) // 25% lighter
               .toList(),
       stops: screenGradient.stops,
@@ -243,7 +243,7 @@ class _MessageBubbleState extends State<MessageBubble>
       return Opacity(
         opacity: 0.85, // Make the reply bubble slightly transparent
         child: BubbleWidget(
-          isMine: repliedIsMine,
+          isMine: true,
           // No controller or isLiked for the preview
           myGradient: replyGradient,
           otherGradient: replyGradient,
@@ -276,7 +276,7 @@ class _MessageBubbleState extends State<MessageBubble>
                       const SizedBox(height: 2),
                       Text(
                         repliedMessage.text ?? '',
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 14,
