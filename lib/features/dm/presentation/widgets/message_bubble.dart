@@ -171,6 +171,18 @@ class _MessageBubbleState extends State<MessageBubble>
       stops: const [0.0, 0.15, 0.45, 0.75, 0.90, 1.0],
     );
 
+    final replyGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors:
+          screenGradient.colors
+              .map(
+                (color) => Color.lerp(color, Colors.white, 0.25)!,
+              ) // 25% lighter
+              .toList(),
+      stops: screenGradient.stops,
+    );
+
     final otherGradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -185,23 +197,6 @@ class _MessageBubbleState extends State<MessageBubble>
 
     final maxDragDistance = screenWidth * 0.15;
 
-    // Widget buildReplyPreview(
-    //   Message repliedMessage,
-    //   BorderRadius borderRadius,
-    //   bool isDark,
-    // ) {
-    //   final repliedSender =
-    //       repliedMessage.isMine ? "You" : repliedMessage.senderName;
-    //   final previewTextColor =
-    //       widget.message.isMine
-    //           ? Colors.white70
-    //           : (isDark ? Colors.grey[400] : Colors.black54);
-    //   return Stack(children: [
-          
-    //     ],
-    //   );
-    // }
-
     Widget bubbleContent(BorderRadius borderRadius) {
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
@@ -210,9 +205,6 @@ class _MessageBubbleState extends State<MessageBubble>
               isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // add the reply preview if it exists
-            if (widget.message.replyingTo != null) Stack(),
-
             // Main message text
             if ((widget.message.text ?? '').isNotEmpty)
               Padding(
@@ -240,6 +232,68 @@ class _MessageBubbleState extends State<MessageBubble>
                 ),
               ),
           ],
+        ),
+      );
+    }
+
+    Widget buildReplyPreview(Message repliedMessage, bool isDark) {
+      final repliedIsMine = repliedMessage.isMine;
+      final repliedSender = repliedIsMine ? "You" : repliedMessage.senderName;
+
+      return Opacity(
+        opacity: 0.85, // Make the reply bubble slightly transparent
+        child: BubbleWidget(
+          isMine: repliedIsMine,
+          // No controller or isLiked for the preview
+          myGradient: replyGradient,
+          otherGradient: replyGradient,
+          bubbleContentBuilder: (borderRadius) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        repliedSender,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color:
+                              repliedIsMine
+                                  ? Colors.white
+                                  : (isDark
+                                      ? Colors.grey[300]
+                                      : Colors.black87),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        repliedMessage.text ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color:
+                              repliedIsMine
+                                  ? Colors.white70
+                                  : (isDark
+                                      ? Colors.grey[400]
+                                      : Colors.black54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       );
     }
@@ -373,14 +427,30 @@ class _MessageBubbleState extends State<MessageBubble>
                     offset: Offset(_dragDx, 0),
                     child: Stack(
                       children: [
-                        BubbleWidget(
-                          isMine: isMine,
-                          isLiked: _isLiked,
-                          controller: _controller,
-                          bubbleContentBuilder:
-                              (borderRadius) => bubbleContent(borderRadius),
-                          myGradient: screenGradient,
-                          otherGradient: otherGradient,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // reply preview, if message.replyingTo exists
+                            if (widget.message.replyingTo != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 2.0),
+                                child: buildReplyPreview(
+                                  widget.message.replyingTo!,
+                                  isDark,
+                                ),
+                              ),
+
+                            // main message bubble
+                            BubbleWidget(
+                              isMine: isMine,
+                              isLiked: _isLiked,
+                              controller: _controller,
+                              bubbleContentBuilder:
+                                  (borderRadius) => bubbleContent(borderRadius),
+                              myGradient: screenGradient,
+                              otherGradient: otherGradient,
+                            ),
+                          ],
                         ),
                         _buildAnimatedHeart(),
                       ],

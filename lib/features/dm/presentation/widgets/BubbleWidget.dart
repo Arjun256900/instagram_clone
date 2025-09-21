@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class BubbleWidget extends StatelessWidget {
   final bool isMine;
-  final bool isLiked;
-  final AnimationController controller;
+  final bool? isLiked;
+  final AnimationController? controller;
   final Widget Function(BorderRadius borderRadius) bubbleContentBuilder;
   final Gradient myGradient;
   final Gradient otherGradient;
@@ -11,8 +11,8 @@ class BubbleWidget extends StatelessWidget {
   const BubbleWidget({
     super.key,
     required this.isMine,
-    required this.isLiked,
-    required this.controller,
+    this.isLiked,
+    this.controller,
     required this.bubbleContentBuilder,
     required this.myGradient,
     required this.otherGradient,
@@ -84,7 +84,7 @@ class BubbleWidget extends StatelessWidget {
           builtContent,
 
           // The 'liked' heart icon
-          if (isLiked)
+          if (isLiked ?? false)
             Positioned(
               bottom: -20,
               left: 8,
@@ -97,7 +97,7 @@ class BubbleWidget extends StatelessWidget {
                 ),
                 child: Center(
                   child:
-                      controller.isAnimating
+                      (controller?.isAnimating ?? false)
                           ? Container(
                             height: 10,
                             width: 10,
