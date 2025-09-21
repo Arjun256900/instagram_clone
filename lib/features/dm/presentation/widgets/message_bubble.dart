@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/features/dm/presentation/widgets/BubbleWidget.dart';
 import '../../models/message.dart';
 import 'package:flutter/services.dart';
 
@@ -156,7 +157,20 @@ class _MessageBubbleState extends State<MessageBubble>
     final screenWidth = MediaQuery.of(context).size.width;
     final maxWidth = screenWidth * 0.71;
 
-    final maxDragDistance = screenWidth * 0.15;
+    final screenGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: const [
+        Color(0xFFE4436F),
+        Color(0xFFE4436F),
+        Color(0xFFAA3AC1),
+        Color(0xFF5D51D8),
+        Color(0xFF5D51D8),
+        Color(0xFF5D51D8),
+      ],
+      stops: const [0.0, 0.15, 0.45, 0.75, 0.90, 1.0],
+    );
+
     final otherGradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -168,77 +182,25 @@ class _MessageBubbleState extends State<MessageBubble>
                 Color.fromRGBO(239, 239, 239, 1),
               ],
     );
-    Widget buildReplyPreview(
-      Message repliedMessage,
-      BorderRadius borderRadius,
-      bool isDark,
-    ) {
-      final repliedSender = repliedMessage.isMine ? "You" : "Friend";
-      final previewTextColor =
-          widget.message.isMine
-              ? Colors.white70
-              : (isDark ? Colors.grey[400] : Colors.black54);
 
-      return ClipRRect(
-        // Use the same border radius to clip the preview content seamlessly
-        borderRadius: borderRadius.subtract(
-          const BorderRadius.all(Radius.circular(1)),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          // A slightly transparent background to differentiate the preview
-          color:
-              widget.message.isMine
-                  ? Colors.white.withOpacity(0.15)
-                  : Colors.black.withOpacity(0.08),
-          child: IntrinsicHeight(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // The little vertical bar on the left of the reply
-                Container(
-                  width: 3,
-                  decoration: BoxDecoration(
-                    color:
-                        widget.message.isMine
-                            ? Color(0xFFE4436F)
-                            : Color(0xFF5D51D8),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Use Expanded to allow text to take up available space
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        repliedSender,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: previewTextColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        repliedMessage.text ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: previewTextColor,
-                          fontSize: 13.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
+    final maxDragDistance = screenWidth * 0.15;
+
+    // Widget buildReplyPreview(
+    //   Message repliedMessage,
+    //   BorderRadius borderRadius,
+    //   bool isDark,
+    // ) {
+    //   final repliedSender =
+    //       repliedMessage.isMine ? "You" : repliedMessage.senderName;
+    //   final previewTextColor =
+    //       widget.message.isMine
+    //           ? Colors.white70
+    //           : (isDark ? Colors.grey[400] : Colors.black54);
+    //   return Stack(children: [
+          
+    //     ],
+    //   );
+    // }
 
     Widget bubbleContent(BorderRadius borderRadius) {
       return ConstrainedBox(
@@ -248,13 +210,8 @@ class _MessageBubbleState extends State<MessageBubble>
               isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Conditionally add the reply preview if it exists
-            if (widget.message.replyingTo != null)
-              buildReplyPreview(
-                widget.message.replyingTo!,
-                borderRadius,
-                isDark,
-              ),
+            // add the reply preview if it exists
+            if (widget.message.replyingTo != null) Stack(),
 
             // Main message text
             if ((widget.message.text ?? '').isNotEmpty)
@@ -283,143 +240,6 @@ class _MessageBubbleState extends State<MessageBubble>
                 ),
               ),
           ],
-        ),
-      );
-    }
-
-    Widget bubble = Container();
-
-    if (isMine) {
-      final content = bubbleContent(
-        BorderRadius.only(
-          topLeft: Radius.circular(isMine ? 18 : 22),
-          topRight: Radius.circular(isMine ? 22 : 18),
-          bottomLeft: const Radius.circular(22),
-          bottomRight: const Radius.circular(22),
-        ),
-      );
-      final invisibleSizingContent = Opacity(opacity: 0.0, child: content);
-      final borderRadius = BorderRadius.only(
-        topLeft: Radius.circular(isMine ? 18 : 22),
-        topRight: Radius.circular(isMine ? 22 : 18),
-        bottomLeft: const Radius.circular(22),
-        bottomRight: const Radius.circular(22),
-      );
-
-      bubble = Stack(
-        clipBehavior: Clip.none, // Allow drawing outside bounds
-        children: [
-          // Gradient Background
-          Builder(
-            builder: (context) {
-              final screenSize = MediaQuery.of(context).size;
-              final renderBox = context.findRenderObject() as RenderBox?;
-              final screenGradient = LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: const [
-                  Color(0xFFE4436F),
-                  Color(0xFFE4436F),
-                  Color(0xFFAA3AC1),
-                  Color(0xFF5D51D8),
-                  Color(0xFF5D51D8),
-                  Color(0xFF5D51D8),
-                ],
-                stops: const [0.0, 0.15, 0.45, 0.75, 0.90, 1.0],
-              );
-              if (renderBox == null || !renderBox.hasSize) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFE4436F), Color(0xFFC34199)],
-                    ),
-                    borderRadius: borderRadius,
-                  ),
-                  child: invisibleSizingContent,
-                );
-              }
-              final position = renderBox.localToGlobal(Offset.zero);
-              return ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback:
-                    (bounds) => screenGradient.createShader(
-                      Rect.fromLTWH(
-                        -position.dx,
-                        -position.dy,
-                        screenSize.width,
-                        screenSize.height,
-                      ),
-                    ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: borderRadius,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.25),
-                        offset: Offset(0, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: invisibleSizingContent,
-                ),
-              );
-            },
-          ),
-          content,
-
-          if (_isLiked)
-            Positioned(
-              bottom: -20,
-              left: 8,
-              child: Container(
-                height: 29,
-                width: 29,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFF2D2D2D),
-                ),
-                child: Center(
-                  // Show the placeholder ONLY when animating
-                  child:
-                      _controller.isAnimating
-                          ? Container(
-                            height: 10,
-                            width: 10,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                          )
-                          : const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                            size: 19,
-                          ),
-                ),
-              ),
-            ),
-        ],
-      );
-    } else {
-      bubble = Container(
-        decoration: BoxDecoration(
-          gradient: otherGradient,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isMine ? 18 : 22),
-            topRight: Radius.circular(isMine ? 22 : 18),
-            bottomLeft: const Radius.circular(22),
-            bottomRight: const Radius.circular(22),
-          ),
-        ),
-        child: bubbleContent(
-          BorderRadius.only(
-            topLeft: Radius.circular(isMine ? 18 : 22),
-            topRight: Radius.circular(isMine ? 22 : 18),
-            bottomLeft: const Radius.circular(22),
-            bottomRight: const Radius.circular(22),
-          ),
         ),
       );
     }
@@ -551,7 +371,20 @@ class _MessageBubbleState extends State<MessageBubble>
                   // The actual bubble, translated by drag
                   Transform.translate(
                     offset: Offset(_dragDx, 0),
-                    child: Stack(children: [bubble, _buildAnimatedHeart()]),
+                    child: Stack(
+                      children: [
+                        BubbleWidget(
+                          isMine: isMine,
+                          isLiked: _isLiked,
+                          controller: _controller,
+                          bubbleContentBuilder:
+                              (borderRadius) => bubbleContent(borderRadius),
+                          myGradient: screenGradient,
+                          otherGradient: otherGradient,
+                        ),
+                        _buildAnimatedHeart(),
+                      ],
+                    ),
                   ),
                 ],
               ),
