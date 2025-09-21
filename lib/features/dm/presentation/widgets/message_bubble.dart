@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/features/dm/presentation/widgets/BubbleWidget.dart';
 import '../../models/message.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +25,7 @@ class _MessageBubbleState extends State<MessageBubble>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  late Animation<Offset> _liftAnimation; // <-- New animation for movement
+  late Animation<Offset> _liftAnimation;
   bool _isLiked = false;
   bool _hapticTriggered = false;
 
@@ -119,7 +120,6 @@ class _MessageBubbleState extends State<MessageBubble>
     if (!_isLiked) {
       return const SizedBox.shrink();
     }
-
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -157,7 +157,32 @@ class _MessageBubbleState extends State<MessageBubble>
     final screenWidth = MediaQuery.of(context).size.width;
     final maxWidth = screenWidth * 0.71;
 
-    final maxDragDistance = screenWidth * 0.15;
+    final screenGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: const [
+        Color(0xFFE4436F),
+        Color(0xFFE4436F),
+        Color(0xFFAA3AC1),
+        Color(0xFF5D51D8),
+        Color(0xFF5D51D8),
+        Color(0xFF5D51D8),
+      ],
+      stops: const [0.0, 0.15, 0.45, 0.75, 0.90, 1.0],
+    );
+
+    final replyGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors:
+          screenGradient.colors
+              .map(
+                (color) => Color.lerp(color, Colors.white, 0.30)!,
+              ) // 25% lighter
+              .toList(),
+      stops: screenGradient.stops,
+    );
+
     final otherGradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -170,19 +195,27 @@ class _MessageBubbleState extends State<MessageBubble>
               ],
     );
 
-    Widget bubbleContent() {
+    final maxDragDistance = screenWidth * 0.15;
+
+    Widget bubbleContent(BorderRadius borderRadius) {
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment:
+              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Main message text
             if ((widget.message.text ?? '').isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 10,
-                ),
+                // Adjust padding if there is a reply preview above
+                padding:
+                    widget.message.replyingTo != null
+                        ? const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 10.0)
+                        : const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 10,
+                        ),
                 child: Text(
                   widget.message.text!,
                   style: TextStyle(
@@ -203,126 +236,65 @@ class _MessageBubbleState extends State<MessageBubble>
       );
     }
 
-    Widget bubble = Container();
+    Widget buildReplyPreview(Message repliedMessage, bool isDark) {
+      final repliedIsMine = repliedMessage.isMine;
+      final repliedSender = repliedIsMine ? "You" : repliedMessage.senderName;
 
-    if (isMine) {
-      final content = bubbleContent();
-      final invisibleSizingContent = Opacity(opacity: 0.0, child: content);
-      final borderRadius = BorderRadius.only(
-        topLeft: Radius.circular(isMine ? 18 : 22),
-        topRight: Radius.circular(isMine ? 22 : 18),
-        bottomLeft: const Radius.circular(22),
-        bottomRight: const Radius.circular(22),
-      );
-
-      bubble = Stack(
-        clipBehavior: Clip.none, // Allow drawing outside bounds
-        children: [
-          // Gradient Background
-          Builder(
-            builder: (context) {
-              final screenSize = MediaQuery.of(context).size;
-              final renderBox = context.findRenderObject() as RenderBox?;
-              final screenGradient = LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: const [
-                  Color(0xFFE4436F),
-                  Color(0xFFE4436F),
-                  Color(0xFFAA3AC1),
-                  Color(0xFF5D51D8),
-                  Color(0xFF5D51D8),
-                  Color(0xFF5D51D8),
-                ],
-                stops: const [0.0, 0.15, 0.45, 0.75, 0.90, 1.0],
-              );
-              if (renderBox == null || !renderBox.hasSize) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFE4436F), Color(0xFFC34199)],
-                    ),
-                    borderRadius: borderRadius,
-                  ),
-                  child: invisibleSizingContent,
-                );
-              }
-              final position = renderBox.localToGlobal(Offset.zero);
-              return ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback:
-                    (bounds) => screenGradient.createShader(
-                      Rect.fromLTWH(
-                        -position.dx,
-                        -position.dy,
-                        screenSize.width,
-                        screenSize.height,
-                      ),
-                    ),
+      return Opacity(
+        opacity: 0.85, // Make the reply bubble slightly transparent
+        child: BubbleWidget(
+          isMine: true,
+          // No controller or isLiked for the preview
+          myGradient: replyGradient,
+          otherGradient: replyGradient,
+          bubbleContentBuilder: (borderRadius) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: ClipRRect(
+                borderRadius: borderRadius,
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: borderRadius,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.25),
-                        offset: Offset(0, 2),
-                        blurRadius: 4,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        repliedSender,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color:
+                              repliedIsMine
+                                  ? Colors.white
+                                  : (isDark
+                                      ? Colors.grey[300]
+                                      : Colors.black87),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        repliedMessage.text ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color:
+                              repliedIsMine
+                                  ? Colors.white70
+                                  : (isDark
+                                      ? Colors.grey[400]
+                                      : Colors.black54),
+                        ),
                       ),
                     ],
                   ),
-                  child: invisibleSizingContent,
-                ),
-              );
-            },
-          ),
-          content,
-
-          if (_isLiked)
-            Positioned(
-              bottom: -20,
-              left: 8,
-              child: Container(
-                height: 29,
-                width: 29,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFF2D2D2D),
-                ),
-                child: Center(
-                  // Show the placeholder ONLY when animating
-                  child:
-                      _controller.isAnimating
-                          ? Container(
-                            height: 10,
-                            width: 10,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                          )
-                          : const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                            size: 19,
-                          ),
                 ),
               ),
-            ),
-        ],
-      );
-    } else {
-      bubble = Container(
-        decoration: BoxDecoration(
-          gradient: otherGradient,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isMine ? 18 : 22),
-            topRight: Radius.circular(isMine ? 22 : 18),
-            bottomLeft: const Radius.circular(22),
-            bottomRight: const Radius.circular(22),
-          ),
+            );
+          },
         ),
-        child: bubbleContent(),
       );
     }
 
@@ -333,6 +305,7 @@ class _MessageBubbleState extends State<MessageBubble>
     return Padding(
       padding: EdgeInsets.only(
         top: 3.0,
+        right: 4,
         bottom: _isLiked ? 29 : (widget.prevMsgByYou == true ? 8 : 0),
         // spacing between bubbles
       ),
@@ -452,7 +425,36 @@ class _MessageBubbleState extends State<MessageBubble>
                   // The actual bubble, translated by drag
                   Transform.translate(
                     offset: Offset(_dragDx, 0),
-                    child: Stack(children: [bubble, _buildAnimatedHeart()]),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // reply preview, if message.replyingTo exists
+                            if (widget.message.replyingTo != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 2.0),
+                                child: buildReplyPreview(
+                                  widget.message.replyingTo!,
+                                  isDark,
+                                ),
+                              ),
+
+                            // main message bubble
+                            BubbleWidget(
+                              isMine: isMine,
+                              isLiked: _isLiked,
+                              controller: _controller,
+                              bubbleContentBuilder:
+                                  (borderRadius) => bubbleContent(borderRadius),
+                              myGradient: screenGradient,
+                              otherGradient: otherGradient,
+                            ),
+                          ],
+                        ),
+                        _buildAnimatedHeart(),
+                      ],
+                    ),
                   ),
                 ],
               ),

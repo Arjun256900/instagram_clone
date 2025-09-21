@@ -13,7 +13,7 @@ class Message {
   final bool isMine;
   final MessageType type;
   final Map<String, int>? reactions; // emoji, count (can be dynamic)
-  final Map<String, dynamic>? attachment; // for post/reel metadata later TODO
+  final Map<String, dynamic>? attachment; // for post/reel metadata later
   final Message? replyingTo;
 
   Message({
