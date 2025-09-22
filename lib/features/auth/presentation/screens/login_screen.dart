@@ -8,7 +8,7 @@ import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 // import 'package:http/http.dart' as http;
 import 'package:instagram/features/auth/presentation/widgets/general_error.dart';
-import 'package:instagram/features/feed/presentations/screens/home_screen.dart';
+import 'package:instagram/features/feed/presentation/screens/home_screen.dart';
 // import 'package:instagram/features/feed/presentations/screens/HomeScreen.dart';
 // import '../../../../core/utils/token_storage.dart';
 
