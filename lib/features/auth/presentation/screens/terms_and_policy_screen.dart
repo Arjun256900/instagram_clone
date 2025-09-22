@@ -4,7 +4,7 @@ import 'package:instagram/features/auth/presentation/widgets/already_have_accoun
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/policy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:instagram/features/feed/presentations/screens/home_screen.dart';
+import 'package:instagram/features/feed/presentation/screens/home_screen.dart';
 // import '../../../../core/utils/token_storage.dart';
 
 // This screen is where the signup request is made, if the user clicks agree

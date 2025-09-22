@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram/features/dm/presentation/screens/dm_screen.dart';
-import 'package:instagram/features/feed/presentations/widgets/post.dart';
-import 'package:instagram/features/feed/presentations/widgets/stories.dart';
+import 'package:instagram/features/feed/presentation/widgets/post.dart';
+import 'package:instagram/features/stories/presentation/widgets/story_carousel.dart';
 
 class Feedscreen extends StatefulWidget {
   const Feedscreen({super.key});
@@ -56,7 +56,7 @@ class _FeedscreenState extends State<Feedscreen> {
             children: [
               const SizedBox(height: 11),
               // Story widget
-              const Stories(),
+              const StoryCarousel(),
               // Post widget
               const Post(
                 media: [
