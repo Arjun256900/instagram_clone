@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/feed/presentations/widgets/collapsable_caption.dart';
+import 'package:instagram/features/feed/presentation/widgets/collapsable_caption.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 
