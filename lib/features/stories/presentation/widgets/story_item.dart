@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/features/stories/presentation/screens/story_view_screen.dart';
 import 'package:instagram/features/stories/presentation/widgets/story_avatar.dart';
 
 class StoryItem extends StatefulWidget {
@@ -18,18 +20,9 @@ class _StoryItemState extends State<StoryItem> {
 
     return GestureDetector(
       onTap: () {
-        // story on tap
-        if (widget.isYou) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Open camera / create story (stub)')),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Open ${widget.storyItem['name']}\'s story (stub)'),
-            ),
-          );
-        }
+        Navigator.of(
+          context,
+        ).push(CupertinoPageRoute(builder: (context) => StoryViewScreen()));
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
