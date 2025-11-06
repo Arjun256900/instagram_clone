@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
+import 'package:instagram/features/auth/providers/auth_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_password.dart';
 import 'dart:ui';
@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
+import 'package:instagram/features/user-profile/providers/profile_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -18,26 +19,37 @@ class SignupScreen extends ConsumerStatefulWidget {
 }
 
 class _SignupScreenState extends ConsumerState<SignupScreen> {
-  final mobileEmailController = TextEditingController();
-  var isMobile = true;
+  final _mobileEmailController = TextEditingController();
+  var isMobile = false;
   bool isLoading = false;
   String? errorMessage;
   bool hasTriedToSignUp = false;
+
   // Regex for validation
   final RegExp emailRegex = RegExp(
     r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
   );
+
   final RegExp phoneRegex = RegExp(r"^[0-9]{10}$");
 
   @override
+  void initState() {
+    super.initState();
+    final currentEmail = ref.read(signupEmailProvider);
+    if (currentEmail.isNotEmpty) {
+      _mobileEmailController.text = currentEmail;
+    }
+  }
+
+  @override
   void dispose() {
-    mobileEmailController.dispose();
+    _mobileEmailController.dispose();
     super.dispose();
   }
 
   void validateInput() {
     hasTriedToSignUp = true;
-    String input = mobileEmailController.text.trim();
+    String input = _mobileEmailController.text.trim();
     if (isMobile) {
       if (!phoneRegex.hasMatch(input)) {
         setState(() {
@@ -64,13 +76,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     setState(() {
       errorMessage = null;
     });
-    if (isMobile) ref.read(signupProvider.notifier).setMobile(input);
-    if (isMobile == false) ref.read(signupProvider.notifier).setEmail(input);
-    ref.read(signupProvider.notifier).setIsMobile(!isMobile);
-    debugPrint("Printing");
-    debugPrint(ref.watch(signupProvider).mobile);
-    debugPrint(ref.watch(signupProvider).email);
-    // print(ref.watch(signupProvider).isMobile);
+
+    // update both auth and profile providers
+    ref.read(signupProvider.notifier).setEmail(input);
+    ref.read(profileProvider.notifier).setEmail(input);
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetPassword()),
@@ -88,10 +97,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     setState(() {
       isMobile = !isMobile;
       isLoading = false;
-      mobileEmailController.text = "";
+      _mobileEmailController.text = "";
       errorMessage = null;
     });
-    ref.read(signupProvider.notifier).setIsMobile(!isMobile);
+    // ref.read(signupProvider.notifier).setIsMobile(!isMobile);
   }
 
   @override
@@ -123,7 +132,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                     // Input Field
                     CustomTextField(
-                      textEditingController: mobileEmailController,
+                      textEditingController: _mobileEmailController,
                       hintText: isMobile ? "Mobile number" : "Email address",
                       isPassword: false,
                       isMobile: isMobile,
@@ -150,7 +159,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       height: 48,
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: toggleSignupMethod,
+                        onPressed: () => {}, // disabled toggling for now
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(
                             color: isDarkMode ? Colors.white : Colors.black,

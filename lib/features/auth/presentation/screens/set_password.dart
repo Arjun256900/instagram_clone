@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
+import 'package:instagram/features/auth/providers/auth_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/date_of_birth.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_name_screen.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
+import 'package:instagram/features/user-profile/providers/profile_provider.dart';
 import 'package:intl/intl.dart'; // for date formatting
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,8 +55,8 @@ class _DateOfBirthState extends ConsumerState<DateOfBirth> {
         selectedDate == null
             ? ''
             : DateFormat('d MMMM yyyy').format(selectedDate!);
-    ref.read(signupProvider.notifier).setDob(formattedDate);
-    debugPrint("DOB: ${ref.watch(signupProvider).dob}");
+    ref.read(profileProvider.notifier).setDob(formattedDate);
+    debugPrint("DOB: ${ref.watch(profileProvider).dob}");
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetNameScreen()),

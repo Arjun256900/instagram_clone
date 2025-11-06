@@ -4,7 +4,9 @@ import 'package:instagram/features/auth/presentation/widgets/already_have_accoun
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/policy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:instagram/features/auth/providers/auth_provider.dart';
 import 'package:instagram/features/feed/presentation/screens/home_screen.dart';
+import 'package:instagram/features/user-profile/providers/profile_provider.dart';
 // import '../../../../core/utils/token_storage.dart';
 
 // This screen is where the signup request is made, if the user clicks agree
@@ -27,7 +29,7 @@ class _TermsAndPolicyScreenState extends ConsumerState<TermsAndPolicyScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text("")),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 14),
+        padding: EdgeInsets.symmetric(horizontal: 18),
         child: Column(
           children: [
             Policy(),
@@ -37,6 +39,8 @@ class _TermsAndPolicyScreenState extends ConsumerState<TermsAndPolicyScreen> {
               isEnabled: true,
               hasTriedToSubmit: false,
               onPressed: () {
+                debugPrint(ref.read(signupProvider).toJson().toString());
+                debugPrint(ref.read(profileProvider).toJson().toString());
                 Navigator.of(context).pushReplacement(
                   CupertinoPageRoute(builder: (context) => Homescreen()),
                 );

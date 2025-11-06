@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/core/theme/app_colors.dart';
-import 'package:instagram/features/user/presentation/screens/settings_activity.dart';
-import 'package:instagram/features/user/presentation/widgets/profile_buttons.dart';
-import 'package:instagram/features/user/presentation/widgets/user_posts.dart';
+import 'package:instagram/features/user-profile/presentation/screens/settings_activity.dart';
+import 'package:instagram/features/user-profile/presentation/widgets/profile_buttons.dart';
+import 'package:instagram/features/user-profile/presentation/widgets/user_posts.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
