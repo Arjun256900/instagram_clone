@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram/features/auth/presentation/providers/signup_provider.dart';
 import 'package:instagram/features/auth/presentation/widgets/already_have_account.dart';
 import 'package:instagram/features/auth/presentation/screens/set_username_screen.dart';
 import 'package:instagram/features/auth/presentation/widgets/auth_button.dart';
 import 'package:instagram/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:instagram/features/auth/presentation/widgets/hero_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:instagram/features/user-profile/providers/profile_provider.dart';
 
 class SetNameScreen extends ConsumerStatefulWidget {
   const SetNameScreen({super.key});
@@ -32,8 +32,7 @@ class _SetNameScreenState extends ConsumerState<SetNameScreen> {
     setState(() {
       errorMessage = null;
     });
-    ref.read(signupProvider.notifier).setName(name);
-    debugPrint("Name : ${ref.watch(signupProvider).name}");
+    ref.read(profileProvider.notifier).setName(name);
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SetUsernameScreen()),

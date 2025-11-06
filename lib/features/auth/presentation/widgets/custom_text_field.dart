@@ -35,7 +35,9 @@ class CustomTextFieldState extends State<CustomTextField> {
           controller: widget.textEditingController,
           obscureText: widget.isPassword ? _isObscure : false,
           keyboardType:
-              widget.isMobile ? TextInputType.number : TextInputType.name,
+              widget.isMobile
+                  ? TextInputType.number
+                  : TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: widget.hintText,
             enabledBorder: OutlineInputBorder(
